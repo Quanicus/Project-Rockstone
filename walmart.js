@@ -7,30 +7,31 @@ import mongoose from "mongoose";
 
 class Walmart extends Retailer{
     static sales_urls = 'https://www.walmart.com/shop/deals/flash-picks';
-    domain = "www.walmart.com";
-    static a_selector = 'a.absolute.w-100';
+    static domain = "https://www.walmart.com";
     static upc_regex = /"upc":"(\d+)"/
-    static selectors = {
-        name_selector: '[itemprop="name"]:last-of-type',
-        model_selector: '.pb2',
-        price_selector: 'span[itemprop="price"]',
+    static selector = {
+        name: '[itemprop="name"]:last-of-type',
+        model: '.pb2',
+        price: 'span[itemprop="price"]',
+        a_tag: 'a.absolute.w-100',
+        next: 'a[aria-label="Next Page"]',
     }
     static get_upc(html) {
         const upc = html.match(this.upc_regex);
         return (upc && upc.length > 1) ? upc[1] : 'Not found'; 
     }
     static get_name(document) {
-        const name_candidates = super.get_textContents(document, this.selectors.name_selector);
+        const name_candidates = super.get_textContents(document, this.selector.name);
         return (name_candidates.length > 0) ? name_candidates.pop() : null;
         
     }
-    static get_model(document, selector) {
-        const model_array = super.get_textContents(document, selector);
+    static get_model(document) {
+        const model_array = super.get_textContents(document, this.selector.model);
         return model_array;
     }
-    static get_price(document, selector) {
+    static get_price(document) {
         let price = {}
-        let price_element = super.get_textContents(document, selector);
+        let price_element = super.get_textContents(document, this.selector.price);
         //const price = price_element.join(" ");
         if (price_element) {
             let price_str = price_element.join('');
@@ -60,7 +61,6 @@ class Walmart extends Retailer{
         try {
             const browser = await puppeteer.launch({headless: 'new', args: ['--incognito']});
             const page = await browser.newPage();
-            const selector = this.a_selector;
             await page.setViewport({ width: 1280, height: 4560 });
             let url = this.sales_urls;
             let products = [];
@@ -85,7 +85,7 @@ class Walmart extends Retailer{
                 } while (captcha)
 
                 //NAVEGATE SALE PAGES AND EXTRACT PRODUCT URLS
-                const data = await page.evaluate(async (selector) => {
+                const data = await page.evaluate(async (selector, domain) => {
                     // Scroll to the bottom of the page
                     await new Promise((resolve) => {
                         const scrollHeight = document.documentElement.scrollHeight;
@@ -100,16 +100,16 @@ class Walmart extends Retailer{
                         scroll();
                     },);
                     //SELECT ALL PRODUCT A-TAGS ON THE PAGE
-                    const links = Array.from(document.querySelectorAll(selector));
+                    const links = Array.from(document.querySelectorAll(selector.a_tag));
                     let next_page = '';
-                    const next_element = document.querySelector('a[aria-label="Next Page"]');
+                    const next_element = document.querySelector(selector.next);
                     if (next_element) {
-                        next_page = 'https://www.walmart.com' + next_element.getAttribute('href');
+                        next_page = domain + next_element.getAttribute('href');
                     }
                     const data = {
                         headers: {
                         'User-Agent': window.navigator.userAgent,
-                        Referrer: document.referrer ? document.referrer : 'https://www.walmart.com',
+                        Referrer: document.referrer ? document.referrer : domain,
                         Accept: '*/*',
                         },
                         product_urls: links.map(link => link.href),
@@ -117,22 +117,18 @@ class Walmart extends Retailer{
                     };
                     return data;
     
-                }, selector);
+                }, this.selector, this.domain);
                 url = data.next;
                 
                 const urls = data.product_urls;
                 const headers = data.headers;
-                
-                //const cookies = await page.cookies()
-                //headers.Cookie = cookies.map((cookie) => `${cookie.name}=${cookie.value}`).join('; ');
                 
                 //VISIT EACH PRODUCT URL AND EXTRACT PRODUCT DATA
                 const product_promises = urls.map(async (url) => {
                     const options = {
                         virtualConsole: new jsdom.VirtualConsole().on('error', () => {
                         // Ignore CSS errors
-                        }),
-                    };
+                        })};
                     const {data: html} = await axios.get(url, {headers});
                     const dom = new jsdom.JSDOM(html, options);
                     const document = dom.window.document;
@@ -141,8 +137,8 @@ class Walmart extends Retailer{
                     product.name = this.get_name(document);
                     product.url = url;
                     product.upc = this.get_upc(html);
-                    product.model = this.get_model(document, this.selectors.model_selector);
-                    product.current_price = this.get_price(document, this.selectors.price_selector);
+                    product.model = this.get_model(document, this.selector.model);
+                    product.current_price = this.get_price(document, this.selector.price);
                     
 
                     return product;
