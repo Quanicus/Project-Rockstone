@@ -37,7 +37,7 @@ class Walmart extends Retailer{
             price_str = price_str.match(/\d+.\d+/g);
             if (price_str) {
                 price.amount = price_str[0];
-                price.date = new Date(now.getFullYear(), now.getMonth(), now.getDate());;
+                price.date = new Date().toLocaleDateString();
             }
         }
         return price;
