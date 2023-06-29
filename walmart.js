@@ -59,6 +59,9 @@ class Walmart extends Retailer{
     }
 
     static extract_products(urls, headers) {
+        for (const url of urls) {
+            console.log(url);
+        }
         return urls.map(async (url) => {
             const options = {
                 virtualConsole: new jsdom.VirtualConsole().on('error', () => {
@@ -74,11 +77,45 @@ class Walmart extends Retailer{
             product.upc = this.get_upc(html);
             product.model = this.get_model(document, this.selector.model);
             product.current_price = this.get_price(document, this.selector.price);
-            
+            console.log(product);
             return product;
         });
     }
+    static async extract_product_urls(page) {
+        return page.evaluate(async (selector, domain) => {
+            // Scroll to the bottom of the page
+            await new Promise((resolve) => {
+                const scrollHeight = document.documentElement.scrollHeight;
+                const viewportHeight = window.innerHeight;
+                let currentPosition = 0;
 
+                const scroll = () => {
+                window.scrollBy(0, viewportHeight);
+                currentPosition += viewportHeight;
+                (currentPosition >= scrollHeight) ? resolve() : setTimeout(scroll, 100); // Adjust the scrolling speed here if needed 
+                };
+                scroll();
+            },);
+            //SELECT ALL PRODUCT A-TAGS ON THE PAGE
+            const links = Array.from(document.querySelectorAll(selector.a_tag));
+            let next_page = '';
+            const next_element = document.querySelector(selector.next);
+            if (next_element) {
+                next_page = domain + next_element.getAttribute('href');
+            }
+            const data = {
+                headers: {
+                'User-Agent': window.navigator.userAgent,
+                Referrer: document.referrer ? document.referrer : domain,
+                Accept: '*/*',
+                },
+                product_urls: links.map(link => link.href),
+                next: next_page,
+            };
+            return data;
+
+        }, this.selector, this.domain);
+    }
     static async get_products() {
         try {
             const browser = await puppeteer.launch({headless: 'new', args: ['--incognito']});
@@ -107,39 +144,7 @@ class Walmart extends Retailer{
                 } while (captcha)
 
                 //NAVEGATE SALE PAGES AND EXTRACT PRODUCT URLS
-                const data = await page.evaluate(async (selector, domain) => {
-                    // Scroll to the bottom of the page
-                    await new Promise((resolve) => {
-                        const scrollHeight = document.documentElement.scrollHeight;
-                        const viewportHeight = window.innerHeight;
-                        let currentPosition = 0;
-        
-                        const scroll = () => {
-                        window.scrollBy(0, viewportHeight);
-                        currentPosition += viewportHeight;
-                        (currentPosition >= scrollHeight) ? resolve() : setTimeout(scroll, 100); // Adjust the scrolling speed here if needed 
-                        };
-                        scroll();
-                    },);
-                    //SELECT ALL PRODUCT A-TAGS ON THE PAGE
-                    const links = Array.from(document.querySelectorAll(selector.a_tag));
-                    let next_page = '';
-                    const next_element = document.querySelector(selector.next);
-                    if (next_element) {
-                        next_page = domain + next_element.getAttribute('href');
-                    }
-                    const data = {
-                        headers: {
-                        'User-Agent': window.navigator.userAgent,
-                        Referrer: document.referrer ? document.referrer : domain,
-                        Accept: '*/*',
-                        },
-                        product_urls: links.map(link => link.href),
-                        next: next_page,
-                    };
-                    return data;
-    
-                }, this.selector, this.domain);
+                const data = await this.extract_product_urls(page);
                 url = data.next;
                 
                 const urls = data.product_urls;
