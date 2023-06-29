@@ -57,6 +57,11 @@ class Walmart extends Retailer{
             });
         }); 
     }
+
+    static extract_products(urls, headers) {
+
+    }
+
     static async get_products() {
         try {
             const browser = await puppeteer.launch({headless: 'new', args: ['--incognito']});
@@ -124,7 +129,7 @@ class Walmart extends Retailer{
                 const headers = data.headers;
                 
                 //VISIT EACH PRODUCT URL AND EXTRACT PRODUCT DATA
-                const product_promises = urls.map(async (url) => {
+                const product_promises = /*urls.map(async (url) => {
                     const options = {
                         virtualConsole: new jsdom.VirtualConsole().on('error', () => {
                         // Ignore CSS errors
@@ -142,8 +147,9 @@ class Walmart extends Retailer{
                     
 
                     return product;
-                }); 
-                products.push(...await Promise.all(product_promises));
+                });*/ 
+                const new_products = await Promise.all(product_promises);
+                products.push(...new_products);
                 //url = `https://www.walmart.com/shop/deals/flash-picks?page=${page_num}&affinityOverride=default`;
                 if (products[products.length-1].name != null){
                     url = data.next;
