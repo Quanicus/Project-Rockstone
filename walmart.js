@@ -59,7 +59,24 @@ class Walmart extends Retailer{
     }
 
     static extract_products(urls, headers) {
+        return urls.map(async (url) => {
+            const options = {
+                virtualConsole: new jsdom.VirtualConsole().on('error', () => {
+                // Ignore CSS errors
+                })};
+            const {data: html} = await axios.get(url, {headers});
+            const dom = new jsdom.JSDOM(html, options);
+            const document = dom.window.document;
+            const product = {};
 
+            product.name = this.get_name(document);
+            product.url = url;
+            product.upc = this.get_upc(html);
+            product.model = this.get_model(document, this.selector.model);
+            product.current_price = this.get_price(document, this.selector.price);
+            
+            return product;
+        });
     }
 
     static async get_products() {
@@ -129,25 +146,8 @@ class Walmart extends Retailer{
                 const headers = data.headers;
                 
                 //VISIT EACH PRODUCT URL AND EXTRACT PRODUCT DATA
-                const product_promises = /*urls.map(async (url) => {
-                    const options = {
-                        virtualConsole: new jsdom.VirtualConsole().on('error', () => {
-                        // Ignore CSS errors
-                        })};
-                    const {data: html} = await axios.get(url, {headers});
-                    const dom = new jsdom.JSDOM(html, options);
-                    const document = dom.window.document;
-                    const product = {};
+                const product_promises = this.extract_products(urls, headers);
 
-                    product.name = this.get_name(document);
-                    product.url = url;
-                    product.upc = this.get_upc(html);
-                    product.model = this.get_model(document, this.selector.model);
-                    product.current_price = this.get_price(document, this.selector.price);
-                    
-
-                    return product;
-                });*/ 
                 const new_products = await Promise.all(product_promises);
                 products.push(...new_products);
                 //url = `https://www.walmart.com/shop/deals/flash-picks?page=${page_num}&affinityOverride=default`;
