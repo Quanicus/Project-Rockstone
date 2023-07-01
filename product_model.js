@@ -3,31 +3,35 @@ import mongoose from "mongoose";
 const price_schema  = mongoose.Schema({
     amount: {
         type: Number,
-        required: true
+        required: false
     },
     date: {
         type: Date,
-        required: true
+        required: false
     }
 });
 
 const product_schema = mongoose.Schema({
     url: {
         type: String,
-        required: true
+        required: false,
+        unique: true
     },
     name: {
         type: String,
-        required: true
+        required: false
     },
-    upc: Number,
+    upc: {
+        type: String,
+        unique: true
+    },
     current_price: {
         type: price_schema,
-        required: true
+        required: false
     },
     price_history: [{
         type: [price_schema],
-        required: true
+        required: false
     }],
 
 });

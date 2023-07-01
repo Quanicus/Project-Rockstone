@@ -6,7 +6,8 @@ import readline from 'readline';
 import mongoose from "mongoose";
 
 class Walmart extends Retailer{
-    static sales_urls = 'https://www.walmart.com/shop/deals/flash-picks';
+    static sales_urls = 'https://www.walmart.com/shop/deals/flash-picks?page=17&affinityOverride=default';
+    //static sales_urls = `https://www.walmart.com/shop/deals/flash-picks?athcpid=eeb79392-2a4b-463f-9b5a-f0da85fa4b7f&athpgid=AthenaGlassHomePageDesktopV1&athznid=athenaModuleZone&athmtid=AthenaItemCarousel&athtvid=3&athena=true&page=1&affinityOverride=default`
     static domain = "https://www.walmart.com";
     static upc_regex = /"upc":"(\d+)"/
     static selector = {
@@ -35,7 +36,7 @@ class Walmart extends Retailer{
         //const price = price_element.join(" ");
         if (price_element) {
             let price_str = price_element.join('');
-            price_str = price_str.match(/\d+.\d+/g);
+            price_str = price_str.match(/\d+\.\d+/g);
             if (price_str) {
                 price.amount = price_str[0];
                 price.date = new Date().toLocaleDateString();
@@ -58,10 +59,8 @@ class Walmart extends Retailer{
         }); 
     }
 
-    static extract_products(urls, headers) {
-        for (const url of urls) {
-            console.log(url);
-        }
+    static async extract_products(urls, headers) {
+        
         return urls.map(async (url) => {
             const options = {
                 virtualConsole: new jsdom.VirtualConsole().on('error', () => {
@@ -77,10 +76,11 @@ class Walmart extends Retailer{
             product.upc = this.get_upc(html);
             product.model = this.get_model(document, this.selector.model);
             product.current_price = this.get_price(document, this.selector.price);
-            console.log(product);
+            //console.log(product);
             return product;
         });
     }
+    
     static async extract_product_urls(page) {
         return page.evaluate(async (selector, domain) => {
             // Scroll to the bottom of the page
@@ -116,6 +116,7 @@ class Walmart extends Retailer{
 
         }, this.selector, this.domain);
     }
+
     static async get_products() {
         try {
             const browser = await puppeteer.launch({headless: 'new', args: ['--incognito']});
@@ -151,15 +152,11 @@ class Walmart extends Retailer{
                 const headers = data.headers;
                 
                 //VISIT EACH PRODUCT URL AND EXTRACT PRODUCT DATA
-                const product_promises = this.extract_products(urls, headers);
+                const product_promises = await this.extract_products(urls, headers);
 
                 const new_products = await Promise.all(product_promises);
                 products.push(...new_products);
-                //url = `https://www.walmart.com/shop/deals/flash-picks?page=${page_num}&affinityOverride=default`;
-                if (products[products.length-1].name != null){
-                    url = data.next;
-                }
-                //products.push(...urls);
+
                 console.log(url);
             } while (url);
 
@@ -173,14 +170,3 @@ class Walmart extends Retailer{
 }
 
 export default Walmart;
-
-
-
-/**puppeteer page open
- * get cookies
- * do {
- * axios get all links on page -> get html of each link -> extract product data
- * 
- * if (there is a next page button)
- * 
- * } */
