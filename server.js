@@ -30,7 +30,6 @@ app.get('/retailer_dropdown', (req, res) => {
 app.post("/retailer_menu", (req, res) => {
     const retailer_name = req.body.retailer;
     retailer = retailMap[retailer_name];
-    //res.send('wtf');
     res.send(retailer.get_menu());
 });
 

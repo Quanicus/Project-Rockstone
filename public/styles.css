@@ -1,5 +1,4 @@
 * {
-    background-color: black;
     color: gold;
 }
 
@@ -20,4 +19,45 @@ a:visited {
     border: 1px solid gold;
     margin: 3px 0;
     padding: 3px;
+} 
+
+body {
+    background-image: url('gold_planet.jpg');
+    background-size: cover; /* Adjust the image size to cover the entire header */
+    background-repeat: no-repeat; /* Prevent image from repeating */
+    background-position: center center;
+    background-attachment: fixed;
+}
+
+header {
+    /*background-color: #333; /* Background color of the header */
+    color: #fff; /* Text color in the header */
+    padding: 20px 0; /* Add padding to the top and bottom */
+}
+
+/* Style the logo */
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Style the navigation menu */
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+}
+
+.nav-links li {
+    margin-right: 20px; /* Add some spacing between menu items */
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.3s; /* Add a smooth color transition on hover */
+}
+
+.nav-links a:hover {
+    color: #00f; /* Change color on hover */
 }
