@@ -20,7 +20,6 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "serve": "node server.js",
-    "start": "nodemon server.js"
+    "start": "node server.js"
   }
 }
