@@ -1,4 +1,23 @@
-h1 {
-    background-color: maroon;
-    color: whitesmoke;
+* {
+    background-color: black;
+    color: gold;
+}
+
+select, button {
+    background-color: #333333;
+    color: white;
+}
+
+button:hover, select:hover {
+    background-color: gold;
+}
+
+a:visited {
+    color: gray;
+}
+
+.product-card {
+    border: 1px solid gold;
+    margin: 3px 0;
+    padding: 3px;
 }

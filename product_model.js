@@ -1,40 +1,36 @@
 import mongoose from "mongoose";
 
-const price_schema  = mongoose.Schema({
-    amount: {
-        type: Number,
-        required: false
-    },
-    date: {
-        type: Date,
-        required: false
-    }
-});
-
 const product_schema = mongoose.Schema({
-    url: {
-        type: String,
-        required: false,
-        unique: true
+    name: String,
+    current_price: {
+        amount: Number,
+        date: Date
     },
-    name: {
-        type: String,
-        required: false
+    current_amzn_price: {
+        amount: Number,
+        date: Date
     },
+    price_history: [{
+        type: [{
+            amount: Number,
+            date: Date
+        }]
+    }],
+    amzn_price_history: [{
+        type: [{
+            amount: Number,
+            date: Date
+        }]
+    }],
     upc: {
         type: String,
         unique: true
     },
-    current_price: {
-        type: price_schema,
-        required: false
-    },
-    price_history: [{
-        type: [price_schema],
-        required: false
-    }],
+    url: String,
+    amzn_url: String,
+    amzn_alts: [String],
 
-});
+}, {strict: 'throw'});
 
 const Product = mongoose.model('Product', product_schema);
 export default Product;
