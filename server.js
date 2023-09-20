@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import { MongoClient, ServerApiVersion } from 'mongodb';
-import retailMap from "./retailMap.js";
+import retailMap from "./src/retailMap.js";
 import Template from "./template.js";
 import bodyParser from "body-parser";
 
