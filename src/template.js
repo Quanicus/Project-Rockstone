@@ -9,7 +9,7 @@ class Template {
     static retailer_dropdown(retailer_list) {
         let html = 
             `<select name="retailer" 
-                hx-post="http://localhost:3000/retailer_menu" 
+                hx-post="/retailer_menu" 
                 hx-swap="innerHTML" 
                 hx-trigger="change" 
                 hx-target="#menu">
@@ -28,7 +28,7 @@ class Template {
             `<button name="selection" 
             type="button" 
             value="${value}"
-            hx-post="http://localhost:3000/menu_selection"
+            hx-post="/menu_selection"
             hx-swap="innerHTML"
             hx-target="#menu">
                 ${text_content}
