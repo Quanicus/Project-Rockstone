@@ -1,4 +1,4 @@
-import Retailer from "../src/retailer.js";
+import Retailer from "../retailer.js";
 
 class Target extends Retailer {
 

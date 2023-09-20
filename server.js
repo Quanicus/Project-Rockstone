@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import retailMap from "./src/retailMap.js";
-import Template from "./template.js";
+import Template from "./src/template.js";
 import bodyParser from "body-parser";
 
 
@@ -13,6 +13,7 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 let retailer;
 //ROUTES
@@ -66,7 +67,7 @@ const client = new MongoClient(uri, {
 mongoose.connect("mongodb+srv://quanicus:Muahahamongo1!@cluster0.tlzyhfc.mongodb.net/Project-RockStone?retryWrites=true&w=majority")
 .then(() => {
     console.log('we mongoated up in this bitch');
-    app.listen(3000, () => {
+    app.listen(process.env.PORT || 3000, () => {
         console.log('waddup bitches node API app runnin the 3000s foo');
     });
 }).catch(error => {

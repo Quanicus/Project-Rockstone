@@ -1,5 +1,5 @@
 import axios from "axios";
-import Template from "../template.js";
+import Template from "./template.js";
 
 class Retailer {
 

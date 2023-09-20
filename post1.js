@@ -1,5 +1,5 @@
 import axios from "axios";
-import {Kohls} from "./retailers/Kohls.js";
+import {Kohls} from "./src/retailers/Kohls.js";
 import Retailer from "./src/retailer.js";
 
 let products = await Kohls.scrape_sales();

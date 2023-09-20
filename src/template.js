@@ -3,7 +3,7 @@ class Template {
 
     static render_product_card (product) {
         // Use ejs.renderFile to render your EJS template
-        return ejs.renderFile('views/product_card.ejs', { product });
+        return ejs.renderFile('./views/product_card.ejs', { product });
     };
     
     static retailer_dropdown(retailer_list) {
