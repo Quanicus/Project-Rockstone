@@ -15,10 +15,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+
 let retailer;
 //ROUTES
-app.get('/', (req, res) => {
-    res.send("this the back end server yo");
+app.get('/god', (req, res) => {
+    let img = `<img src="hot_dog_god.webp" alt="Hot Dog God"></img>`;
+    res.send(img);
 });
 
 app.get('/retailer_dropdown', (req, res) => {
