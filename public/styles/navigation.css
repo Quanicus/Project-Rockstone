@@ -36,7 +36,8 @@
         z-index: 1000;
         flex-direction: column;
         padding: min(30vh, 10rem) 2rem;
-        transform: translateX(100%);
+        
+        transition: all 350ms ease-out;
     }
     .primary-navigation[data-visible="true"] {
         transform: translateX(0%);

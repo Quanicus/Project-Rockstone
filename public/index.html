@@ -25,8 +25,8 @@
             
 
             <nav>
-                <button id="nav-toggle" class="mobile-nav-toggle" hx-get="/nav-toggle?visible=false" hx-trigger="click" hx-target="nav" hx-swap="outerHTML"></button>
-                <ul id="primary-navigation" class="primary-navigation flex" data-visible="false">
+                <button id="nav-toggle" class="mobile-nav-toggle" hx-get="/nav-toggle?visible=100%" hx-trigger="click" hx-target="#primary-navigation" hx-swap="outerHTML"></button>
+                <ul id="primary-navigation" class="primary-navigation flex" style="transform: translateX(100%);" data-visible="false">
                     <li class="active">
                         <a href="/"><span>00</span>Home</a>
                     </li>
