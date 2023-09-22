@@ -52,8 +52,9 @@ body {
     background-image: url('../images/gold_planet.jpg');
     background-size: cover; /* Adjust the image size to cover the entire header */
     background-repeat: no-repeat; /* Prevent image from repeating */
-    background-position: center center;
+    background-position: left bottom;
     background-attachment: fixed;
+    overflow-x: hidden;
 }
 
 

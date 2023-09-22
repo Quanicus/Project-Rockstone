@@ -5,7 +5,6 @@ class Template {
         // Use ejs.renderFile to render your EJS template
         return ejs.renderFile('./views/product_card.ejs', { product });
     };
-    
     static retailer_dropdown(retailer_list) {
         let html = 
             `<select name="retailer" 

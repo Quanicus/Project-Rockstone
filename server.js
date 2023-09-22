@@ -5,6 +5,7 @@ import { MongoClient, ServerApiVersion } from 'mongodb';
 import retailMap from "./src/retailMap.js";
 import Template from "./src/template.js";
 import bodyParser from "body-parser";
+import ejs from "ejs";
 
 
 const app = express();
@@ -23,6 +24,13 @@ let retailer;
 app.get('/god', (req, res) => {
     let img = `<img src="images/hot_dog_god.webp" alt="Hot Dog God"></img>`;
     res.send(img);
+});
+
+app.get('/nav-toggle', async (req, res) => {
+    const visible = req.query.visible;
+    const data = (visible === "true") ? "false" : "true";
+    let html_res = await ejs.renderFile("views/navigation.ejs", {data});
+    res.send(html_res);
 });
 
 app.get('/retailer_dropdown', (req, res) => {
