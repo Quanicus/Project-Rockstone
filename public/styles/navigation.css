@@ -39,9 +39,6 @@
         transform: translateX(100%);
         transition: all 350ms ease-out;
     }
-    .primary-header.hidden {
-        
-    }
     .primary-navigation.active {
         transform: translateX(0%);
     }
