@@ -27,9 +27,13 @@ app.get('/god', (req, res) => {
 });
 
 app.get('/nav-toggle', async (req, res) => {
-    const visible = req.query.visible;
-    const data = (visible === "100%") ? "0%" : "100%";
-    let html_res = await ejs.renderFile("views/navigation.ejs", {data});
+    let status = req.query.status;
+    let html_res;
+    if (status === "active") {
+        html_res = await ejs.renderFile("views/hidden-nav.ejs");
+    } else {
+        html_res = await ejs.renderFile("views/active-nav.ejs");
+    }
     res.send(html_res);
 });
 
