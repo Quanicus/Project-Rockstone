@@ -3,28 +3,33 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="styles/styles.css">
+        <link rel="stylesheet" href="styles/navigation.css">
         <script src="https://unpkg.com/htmx.org@1.9.5" 
             integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" 
             crossorigin="anonymous">
         </script>
     </head>
     <body>
-        <header>
+        <header class="primary-header flex">
+            <div class="logo">
+                <div id="color-demo" class="smooth" style="color:red"
+                hx-get="/god" 
+                hx-swap="outerHTML" 
+                hx-trigger="click"
+                hx-target="#god">I'm Quanicus, Hot Dog Chef Exjt;jreoijaire</div>
+                <div id="god">but sumtiems i liek to code ehe</div>
+                
+            </div>
             <nav>
-                <div class="logo">
-                    <div hx-get="/god" 
-                    hx-trigger="click"
-                    hx-target="#god"
-                    hx-swap="innerHTML">I'm Quanicus, Hot Dog Chef Exjt;jreoijaire</div>
-                    <div id="god"></div>
-                    
-                </div>
-                <ul class="nav-links">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/services">Services</a></li>
-                    <li><a href="/contact">Contact</a></li>
+                <ul id="primary-navigation" class="primary-navigation flex">
+                    <li class="active">
+                        <a href="/"><span>00</span>Home</a>
+                    </li>
+                    <li><a class="glow-text" href="/about"><span>01</span>About</a></li>
+                    <li><a href="/technology"><span>02</span>Technology</a></li>
+                    <li><a href="/services"><span>03</span>Services</a></li>
+                    <li><a href="/contact"><span>04</span>Contact</a></li>
                 </ul>
             </nav>
         </header>

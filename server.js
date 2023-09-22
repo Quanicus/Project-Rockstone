@@ -18,8 +18,10 @@ app.use(express.static('public'));
 
 let retailer;
 //ROUTES
+
+
 app.get('/god', (req, res) => {
-    let img = `<img src="hot_dog_god.webp" alt="Hot Dog God"></img>`;
+    let img = `<img src="images/hot_dog_god.webp" alt="Hot Dog God"></img>`;
     res.send(img);
 });
 

@@ -1,0 +1,79 @@
+* {
+    color: white;
+    font-family: "Megatrans";
+}
+
+@font-face {
+    font-family: 'Megatrans';
+    src: url('../fonts/MegatransdemoRegular-8M9B0.otf') format('opentype');
+}
+@font-face {
+    font-family: 'Glitchy';
+    src: url('../fonts/CfGlitchCityRegular-L1vZ.ttf');
+}
+@font-face {
+    font-family: 'Bungee';
+    src: url('../fonts/BungeeHairline-Regular.ttf');
+}
+@font-face {
+    font-family: 'Futuristic';
+    src: url('../fonts/FuturisticRegular-w1Zjz.ttf');
+}
+.flex {
+    display: flex;
+    gap: var(--gap, 1rem);
+}
+
+.grid {
+    display: grid;
+    gap: var(--gap, 1rem);
+}
+
+select, button {
+    background-color: #333333;
+    color: white;
+}
+
+button:hover, select:hover {
+    background-color: gold;
+}
+
+a:visited {
+    color: white;
+}
+
+.product-card {
+    border: 1px solid gold;
+    margin: 3px 0;
+    padding: 3px;
+} 
+
+body {
+    background-image: url('../images/gold_planet.jpg');
+    background-size: cover; /* Adjust the image size to cover the entire header */
+    background-repeat: no-repeat; /* Prevent image from repeating */
+    background-position: center center;
+    background-attachment: fixed;
+}
+
+
+/* Style the logo */
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+#god {
+    font-size:9px;
+    font-weight: lighter;
+}
+/* Style the navigation menu */
+
+@keyframes colorChange {
+    0% { color: blue; }
+    50% { color: green; }
+    100% { color: red; }
+}
+
+#color-demo {
+    animation: colorChange 2s infinite; /* Animation name, duration, iteration count */
+}
