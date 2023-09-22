@@ -1,13 +1,17 @@
-.primary-header {
 
+.primary-header {
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    flex: 1;
 }
 .mobile-nav-toggle {
     display: none;
 }
 .primary-navigation {
+    width: 80vw;
+    display: flex;
+    justify-content: space-evenly;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -42,9 +46,9 @@
 }
 @media (min-width: 35em) {
     .primary-navigation {
-        --gap: 3rem;
-        padding-block: 1.7rem;
-        padding-inline: clamp(1rem, 10vw, 10rem);
+        --gap: 2rem;
+        padding-block: 1.7em;
+        padding-inline: clamp(3rem, 10vw, 10rem);
     }
 }
 @media (max-width: 35em) {
