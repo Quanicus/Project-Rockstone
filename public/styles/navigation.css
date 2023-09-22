@@ -1,12 +1,13 @@
 .primary-header {
+
     align-items: center;
     justify-content: space-between;
+    width: 100%;
 }
 .mobile-nav-toggle {
     display: none;
 }
 .primary-navigation {
-    
     list-style: none;
     padding: 0;
     margin: 0;
@@ -22,21 +23,33 @@
 .primary-navigation a {
     font-family: "Bungee";
     text-decoration: none;
-    transition: 500ms;
+    
 }
-.primary-navigation a:hover *, a:hover{
-    color: gold; /* Change the text color on hover (optional) */
-    text-shadow: 0 0 10px gold;
-}
-
 .primary-navigation span {
     font-family: "Futuristic";
     margin-inline-end: .7em;
 }
+.primary-navigation a:hover *, a:hover{
+    color: gold; /* Change the text color on hover (optional) */
+    text-shadow: 0 0 20px gold;
+}
 
+
+@media (min-width: 35em) and (max-width: 55em) {
+    .primary-navigation a > span{
+        display: none;
+    }
+}
+@media (min-width: 35em) {
+    .primary-navigation {
+        --gap: 3rem;
+        padding-block: 1.7rem;
+        padding-inline: clamp(1rem, 10vw, 10rem);
+    }
+}
 @media (max-width: 35em) {
     .primary-navigation {
-        --gap: 2em;
+        --gap: 2.5em;
         position: fixed;
         inset: 0 0 0 30%;
         z-index: 1000;
@@ -49,7 +62,6 @@
         transform: translateX(0%);
     }
     .mobile-nav-toggle {
-        text-shadow: 19px 5px 5px gold;
         display: block;
         position: absolute;
         background: url("../images/burger.svg");

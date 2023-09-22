@@ -1,0 +1,50 @@
+@font-face {
+    font-family: 'Megatrans';
+    src: url('../fonts/MegatransdemoRegular-8M9B0.otf') format('opentype');
+}
+@font-face {
+    font-family: 'Rocket';
+    src: url('../fonts/Rocketwildness-7BB8R.ttf');
+}
+@font-face {
+    font-family: 'Bungee';
+    src: url('../fonts/BungeeHairline-Regular.ttf');
+}
+@font-face {
+    font-family: 'Digital';
+    src: url('../fonts/digital-7.ttf');
+}
+@font-face {
+    font-family: 'Futuristic';
+    src: url('../fonts/FuturisticRegular-w1Zjz.ttf');
+}
+@font-face {
+    font-family: 'Orbitron';
+    src: url('../fonts/Orbitron-VariableFont_wght.ttf');
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'Orbitron';
+    src: url('../fonts/Orbit-fam/Orbitron-Medium.ttf');
+    font-weight: 500;
+}
+@font-face {
+    font-family: 'Orbitron';
+    src: url('../fonts/Orbit-fam/Orbitron-BemiBold.ttf');
+    font-weight: 600;
+}
+@font-face {
+    font-family: 'Orbitron';
+    src: url('../fonts/Orbit-fam/Orbitron-Bold.ttf');
+    font-weight: 700;
+}
+@font-face {
+    font-family: 'Orbitron';
+    src: url('../fonts/Orbit-fam/Orbitron-ExtraBold.ttf');
+    font-weight: 800;
+}
+@font-face {
+    font-family: 'Orbitron';
+    src: url('../fonts/Orbit-fam/Orbitron-Black.ttf');
+    font-weight: 900;
+}
