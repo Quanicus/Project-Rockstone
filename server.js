@@ -27,14 +27,9 @@ app.get('/god', (req, res) => {
 });
 
 app.get('/nav-toggle', async (req, res) => {
-    let status = req.query.status;
-    let html_res;
-    if (status === "active") {
-        html_res = await ejs.renderFile("views/hidden-nav.ejs");
-    } else {
-        html_res = await ejs.renderFile("views/active-nav.ejs");
-    }
-    res.send(html_res);
+    const page = req.query.page;
+    const html = `<input id="nav-toggle" type="checkbox" class="mobile-nav-toggle"></input>`;
+    res.send(html);
 });
 
 app.get('/retailer_dropdown', (req, res) => {

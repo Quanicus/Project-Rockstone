@@ -6,36 +6,47 @@
         <link rel="stylesheet" href="styles/styles.css">
         <link rel="stylesheet" href="styles/navigation.css">
         <link rel="stylesheet" href="styles/fonts.css">
+        <link rel="stylesheet" href="styles/page.css">
         <script src="https://unpkg.com/htmx.org@1.9.5" 
             integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" 
             crossorigin="anonymous">
         </script>
     </head>
-    <body></body>
-    <body class="off-stage"></body>
-    <header class="primary-header flex">
-        <div class="logo">
-            <div id="color-demo" class="smooth" style="color:red"
-            hx-get="/god" 
-            hx-swap="outerHTML" 
-            hx-trigger="click"
-            hx-target="#god">yo</div>          
-        </div>
-        <button id="nav-toggle" 
-                class="mobile-nav-toggle" 
-                hx-get="/nav-toggle?status=hidden" 
-                hx-trigger="click" 
-                hx-target="#primary-navigation" 
-                hx-swap="outerHTML">
-        </button>
-        <nav>
-            <ul id="primary-navigation" class="primary-navigation flex">
-                <li><a href="/"><span>00</span>Home</a></li>
-                <li><a href="/about"><span>01</span>About</a></li>
-                <li><a href="/technology"><span>02</span>Technology</a></li>
-                <li><a href="/services"><span>03</span>Services</a></li>
-                <li><a href="/contact"><span>04</span>Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+    <body>
+        <div id="home-page">WELCOME TO OPERATION ROCKSTONE</div>
+        <header class="primary-header flex">
+            <input id="nav-toggle" type="checkbox" class="mobile-nav-toggle">
+            <div class="logo">yo</div>
+            <nav class="primary-navigation flex">
+                <label class="page-radio" for="home" hx-get="/nav-toggle?page=name" hx-trigger="click" hx-swap="outerHTML" hx-target="#nav-toggle">
+                    <span>00</span>Home
+                </label>
+                <label class="page-radio" for="mission" hx-get="/nav-toggle?page=mission" hx-trigger="click" hx-swap="outerHTML" hx-target="#nav-toggle">
+                    <span>01</span>Mission
+                </label>
+                <label class="page-radio" for="technology" hx-get="/nav-toggle?page=technology" hx-trigger="click" hx-swap="outerHTML" hx-target="#nav-toggle">
+                    <span>02</span> Technology
+                </label>   
+                <label class="page-radio" for="services" hx-get="/nav-toggle?page=services" hx-trigger="click" hx-swap="outerHTML" hx-target="#nav-toggle">
+                    <span>03</span> Services
+                </label>
+                <label  class="page-radio" for="contact" hx-get="/nav-toggle?page=contact" hx-trigger="click" hx-swap="outerHTML" hx-target="#nav-toggle">
+                    <span>04</span> Contact
+                </label>
+            </nav>  
+            <div></div> 
+        </header>
+        
+        <input id="home" type="radio" class="page-radio hidden" name="page-display" value="home">
+        <input id="mission" type="radio" class="page-radio hidden" name="page-display" value="mission"> 
+        <input id="technology" type="radio" class="page-radio hidden" name="page-display" value="technology">
+        <input id="services" type="radio" class="page-radio hidden" name="page-display" value="services"> 
+        <input id="contact" type="radio" class="page-radio hidden" name="page-display" value="contact">
+        <div id="home-page" class="page" hx-swap-oob="true">home</div>
+        <div id="mission-page" class="page" hx-swap-oob="true">mission</div>
+        <div id="technology-page" class="page" hx-swap-oob="true">technology</div>
+        <div id="services-page" class="page" hx-swap-oob="true">services</div>
+        <div id="contact-page" class="page" hx-swap-oob="true">contact</div>
+        
+    </body>
 </html>
