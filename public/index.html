@@ -13,7 +13,6 @@
         </script>
     </head>
     <body>
-        <div id="home-page">WELCOME TO OPERATION ROCKSTONE</div>
         <header class="primary-header flex">
             <input id="nav-toggle" type="checkbox" class="mobile-nav-toggle">
             <div class="logo">yo</div>
@@ -34,19 +33,68 @@
                     <span>04</span> Contact
                 </label>
             </nav>  
-            <div></div> 
         </header>
         
-        <input id="home" type="radio" class="page-radio hidden" name="page-display" value="home">
+        <input id="home" type="radio" class="page-radio hidden" name="page-display" value="home" checked>
         <input id="mission" type="radio" class="page-radio hidden" name="page-display" value="mission"> 
         <input id="technology" type="radio" class="page-radio hidden" name="page-display" value="technology">
         <input id="services" type="radio" class="page-radio hidden" name="page-display" value="services"> 
         <input id="contact" type="radio" class="page-radio hidden" name="page-display" value="contact">
-        <div id="home-page" class="page" hx-swap-oob="true">home</div>
-        <div id="mission-page" class="page" hx-swap-oob="true">mission</div>
-        <div id="technology-page" class="page" hx-swap-oob="true">technology</div>
-        <div id="services-page" class="page" hx-swap-oob="true">services</div>
-        <div id="contact-page" class="page" hx-swap-oob="true">contact</div>
+        <section id="home-page" class="page"><div>WELCOME TO OPERATION ROCKSTONE</div></section>
+        <section id="mission-page" class="page">
+            <h1>Mission</h1>
+            <p>This one man crew is captained by the regarded Quan "The Pants" Pham. 
+                On a self-proclaimed pilgrimage
+                to plunder the ponderous powers 
+                present within his peers. 
+                Blinded by the light he finds his way,
+                hiding in the darkness keeps his fears at bay.
+                Reach for the stars,
+                grasping at straws,
+                when will he fall?
+
+
+                To those that paved the way he pays homage, because from them he gained great knowledge.</p>
+        </section>
+        <section id="technology-page" class="page">
+            <div>
+                <h2>LANGUAGES</h2>
+                <ul>
+                    <li>Java</li>
+                    <li>C/C++</li>
+                    <li>Python</li>
+                    <li>MIPS Assembly</li>
+                    <li>
+                        Java Script
+                        <ul>
+                            <li>Node.js</li>
+                            <li>Puppeteer</li>
+                            <li>Cheerio</li>
+                            <li>Express.js</li>
+                            <li>Axios</li>
+                        </ul>
+                    </li>
+                    <li>HTML/HTMX</li>
+                    <li>CSS</li>
+                </ul>
+                <h2>TOOLS/APPLICATIONS</h2>
+                <ul>
+                    <li>IDEs: NetBeans, Eclipse, IntelliJ, VS Code, Vim</li>
+                    <li>Postman</li>
+                    <li>MongoDB</li>
+                    <li>mySQL</li>
+                    <li></li>
+                </ul>
+                <h2>OPERATING SYSTEMS</h2>
+                <ul>
+                    <li>Windows</li>
+                    <li>MacOS</li>
+                    <li>Unix/Linux</li>
+                </ul>
+            </div>
+        </section>
+        <section id="services-page" class="page">services</section>
+        <section id="contact-page" class="page">contact</section>
         
     </body>
 </html>

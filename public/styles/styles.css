@@ -23,18 +23,6 @@ body, html {
     display: none;
 } 
 
-#home-page {
-    position: absolute;
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    font-size: 8vw;
-    width: 100%;
-    height: 100%;
-    padding-inline: 17rem;
-    
-    
-}
 select, button {
     background-color: #333333;
     color: white;
@@ -55,7 +43,6 @@ body {
     background-size: cover; /* Adjust the image size to cover the entire header */
     background-position: left bottom;
     background-attachment: fixed;
-    z-index: 1;
 
 }
 /* Style the logo */
