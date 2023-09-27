@@ -1,16 +1,17 @@
 .page {
     position: absolute;
-    display: none;
+    opacity: 0;
     width: 100vw;
     height: 100vh;
     background-position: left bottom;
     background-size: cover; 
-    transition: all 1.5s ease-out;
+    transition: opacity 1.5s ease;
 
 }
 
 #home:checked ~ #home-page {
     position: absolute;
+    opacity: 1;
     display: flex;
     justify-content: center; 
     align-items: center; 
@@ -22,27 +23,27 @@
 }
 #mission:checked ~ #mission-page {
     display: block;
-    opacity: 100%;
-    margin-top: 0;
+    opacity: 1;
+   
     background-image: url('../images/gold-swirl.jpg');
 
 }
 #technology:checked ~ #technology-page {
     display: block;
-    opacity: 100%;
-    margin-top: 0;
+    opacity: 1;
+   
     background-image: url('../images/gold-system.jpg');
  
 }
 #services:checked ~ #services-page {
     display: block;
-    opacity: 100%;
-    margin-top: 0;
+    opacity: 1;
+
     background-image: url('../images/gold-galaxy.jpg');
 }
 #contact:checked ~ #contact-page{
     display: block;
-    opacity: 100%;
-    margin-top: 0;
+    opacity: 1;
+
     background-color: violet;
 }
