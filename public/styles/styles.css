@@ -1,12 +1,13 @@
 * {
     color: white;
-    font-family: "Bungee";
-    box-sizing: border-box;
-    
-}
-body, html {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    
+}
+body {
+
     overflow: hidden;
     background-color: black;
     
@@ -24,12 +25,8 @@ body, html {
     display: none;
 } 
 
-select, button {
+select {
     background-color: #333333;
-    color: white;
-}
-
-a:visited {
     color: white;
 }
 
@@ -39,13 +36,7 @@ a:visited {
     padding: 3px;
 } 
 
-body {
-    background-image: url('../images/gold_planet.jpg');
-    background-size: cover; /* Adjust the image size to cover the entire header */
-    background-position: left bottom;
-    background-attachment: fixed;
 
-}
 /* Style the logo */
 .logo {
     font-size: 24px;

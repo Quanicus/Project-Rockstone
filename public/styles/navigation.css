@@ -2,6 +2,7 @@
     position: absolute;
     align-items: center;
     justify-content: space-between;
+    font-family: "Bungee";
     width: 100%;
     z-index: 9000;
 }

@@ -6,44 +6,44 @@
     background-position: left bottom;
     background-size: cover; 
     transition: opacity 1.5s ease;
+    z-index: -1;
 
 }
 
 #home:checked ~ #home-page {
     position: absolute;
+    font-family: "Bungee";
     opacity: 1;
-    display: flex;
     justify-content: center; 
     align-items: center; 
-    font-size: 8vw;
+    font-size: min(5vw, 3em);
     width: 100%;
     height: 100%;
     background-image: url('../images/gold_planet.jpg');
+    z-index: 1;
 
+}
+#home-page h1 {
+    margin-inline: 33%;
 }
 #mission:checked ~ #mission-page {
     display: block;
     opacity: 1;
-   
+    z-index: 1;
     background-image: url('../images/gold-swirl.jpg');
 
 }
 #technology:checked ~ #technology-page {
     display: block;
     opacity: 1;
-   
+    z-index: 1;
     background-image: url('../images/gold-system.jpg');
  
 }
-#services:checked ~ #services-page {
-    display: block;
-    opacity: 1;
 
-    background-image: url('../images/gold-galaxy.jpg');
-}
 #contact:checked ~ #contact-page{
     display: block;
     opacity: 1;
-
+    z-index: 1;
     background-color: violet;
 }

@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="styles/navigation.css">
         <link rel="stylesheet" href="styles/fonts.css">
         <link rel="stylesheet" href="styles/page.css">
+        <link rel="stylesheet" href="styles/services.css">
         <script src="https://unpkg.com/htmx.org@1.9.5" 
             integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" 
             crossorigin="anonymous">
@@ -15,7 +16,7 @@
     <body>
         <header class="primary-header flex">
             <input id="nav-toggle" type="checkbox" class="mobile-nav-toggle">
-            <div class="logo">yo</div>
+            <div class="logo"></div>
             <nav class="primary-navigation flex">
                 <label class="page-radio" for="home" hx-get="/nav-toggle?page=name" hx-trigger="click" hx-swap="outerHTML" hx-target="#nav-toggle">
                     <span>00</span>Home
@@ -40,9 +41,10 @@
         <input id="technology" type="radio" class="page-radio hidden" name="page-display" value="technology">
         <input id="services" type="radio" class="page-radio hidden" name="page-display" value="services"> 
         <input id="contact" type="radio" class="page-radio hidden" name="page-display" value="contact">
-        <section id="home-page" class="page"><div>WELCOME TO OPERATION ROCKSTONE</div></section>
+
+        <section id="home-page" class="page flex"><h1>THIS IS OPERATION ROCKSTONE</h1></section>
         <section id="mission-page" class="page">
-            <h1>Mission</h1>
+            <h1>MISSION</h1>
             <p>This one man crew is captained by the regarded Quan "The Pants" Pham. 
                 On a self-proclaimed pilgrimage
                 to plunder the ponderous powers 
@@ -93,7 +95,23 @@
                 </ul>
             </div>
         </section>
-        <section id="services-page" class="page">services</section>
+        <section id="services-page" class="page">
+            <h1>The ReconStar Initiative</h1>
+            <p>It is known that intersteller trade within the entirety of our current traversible star cluster is largely dominated by Scamazon's Jimmothy Bezinos and his gang of inter-galactic goons. 
+            
+            Now it seems that everyone wants a piece as they latch onto Scamazon's affiliate program to peddle their mass-produced gagets. When Scamazon was first established, its competetive pricing was the major appeal to consumers. However, today's shoppers crave the convenience of next-day delivery using their proprietary Prime-drive warp technology. A large percentage of the population don't even bother to shop around for more competetive pricing and reflexively smash the dopamine inducing 'buy now' button.
+            
+            The Phantom Protocol was implemented by Capt. Quan for the purpose of obtaining valuable intel of competing retailers' pricing.</p>
+            <div>
+                <button type="button" id="launch">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    ACTIVATE PHANTOM PROTOCOL
+                </button>
+            </div>
+        </section>
         <section id="contact-page" class="page">contact</section>
         
     </body>
