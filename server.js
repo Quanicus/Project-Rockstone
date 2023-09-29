@@ -19,23 +19,31 @@ app.use(express.static('public'));
 
 let retailer;
 //ROUTES
-
-
-app.get('/god', (req, res) => {
-    let img = `<img src="images/hot_dog_god.webp" alt="Hot Dog God"></img>`;
-    res.send(img);
+app.get('/api', async (req, res) => {
+    const retailers = Object.keys(retailMap);
+    retailers.sort();
+    const buttons = await ejs.renderFile('views/hit-list.ejs', {retailers});
+    res.send(buttons);
 });
-
+app.get('/api/get-menu/:retailer', async (req, res) => {
+    const key = req.params.retailer;
+    const retailer = retailMap[key];
+    const options = retailer.get_menu_options();
+    const buttons = await ejs.renderFile('views/retail-category.ejs', {options, retailer:key});
+    res.send(buttons);
+});
+app.get('/api/activate/:retailer/:fn', async (req, res) => { 
+    const key = req.params.retailer;
+    const fn = req.params.fn;
+    const retailer = retailMap[key];
+    const products = await retailer[fn]();
+    const promises = products.map(product => Template.render_product_card(product));
+    const product_cards = await Promise.all(promises);
+    res.send(product_cards.join(''));
+});
 app.get('/nav-toggle', async (req, res) => {
-    const page = req.query.page;
     const html = `<input id="nav-toggle" type="checkbox" class="mobile-nav-toggle"></input>`;
     res.send(html);
-});
-
-app.get('/retailer_dropdown', (req, res) => {
-    const retailers = Object.keys(retailMap);
-    const drop_down = Template.retailer_dropdown(retailers.sort());
-    res.send(drop_down);
 });
 
 app.post("/retailer_menu", (req, res) => {

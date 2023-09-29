@@ -29,7 +29,8 @@ class Walmart extends Retailer {
     }
     //overriding abstract method
     static get_menu_options() {
-        return {Sales: "scrape_sales", "Flash Deals": "scrape_flash"};
+        return [{text_content:"Sales", fn:"scrape_sales"},
+                {text_content:"Flash Deals", fn:"scrape_flash"}];
     }
     //MENU OPTIONS
     static async scrape_sales() {

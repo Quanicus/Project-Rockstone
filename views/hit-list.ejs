@@ -1,0 +1,12 @@
+<h1>CHOOSE YOUR TARGET FOR INFILTRATION:</h1>
+<div class="menu-buttons" style="display:flex; gap:3em;">
+    <% for (const retailer of retailers) { %>
+        <button type="button" class="neon-button" hx-get="/api/get-menu/<%= retailer %>" hx-target="#app-display" hx-swap="innerHTML" hx-trigger="click">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <%= retailer %>
+        </button>
+    <% } %>
+</div>
