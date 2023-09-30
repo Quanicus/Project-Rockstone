@@ -50,7 +50,7 @@ class Kohls extends Retailer {
     }
 
     static get_menu_options(){
-        return {Sales: "scrape_sales"};
+        return [{text_content: "Sales", fn: "scrape_sales"}];
     }
 }
 

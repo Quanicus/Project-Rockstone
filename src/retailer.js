@@ -5,19 +5,22 @@ class Retailer {
 
     //abstract
     static parse_sales_response(response) {
-        throw new Error("process_raw_products must be overridden in subclasses");
+        throw new Error("process_raw_products() must be overridden in subclass of Retailer.");
     }
     //abstract
     static parse_product_response(response) {
-        throw new Error("parse_product_response must be overridden in subclasses");
+        throw new Error("parse_product_response() must be overridden in subclass of Retailer.");
     }
     //abstract
     static parse_max_page_response(response) {
-        throw new Error("parse_max_page_response must be overridden in subclasses");
+        throw new Error("parse_max_page_response() must be overridden in subclass of Retailer.");
+    }
+    static get_product_req_config(product) {
+        throw new Error("get_product_req_config() must be overridden in subclass of Retailer.")
     }
     //abstract
     static get_menu_options() {
-        throw new Error("get_menu_options must be overridden in subclasses");
+        throw new Error("get_menu_options() must be overridden in subclass of Retailer.");
     }
 
     static get_menu() {
@@ -29,15 +32,31 @@ class Retailer {
         return html;
     }
 
+    static async extract_products(raw_product_list) {
+        let finished_products = [];
+        for (const [index, product] of raw_product_list.entries()) {
+            const product_req_config = this.get_product_req_config(product);
+            const product_data_promise = this.scrape_product_page(product_req_config);
+            finished_products.push(product_data_promise);
+            console.log("extracting " + index + "/" + raw_product_list.length);
+            
+            if (index % 5 === 0) {
+                await Promise.all(finished_products);
+            }
+        }
+        
+        await Promise.all(finished_products);
+        return finished_products;
+    }
     //IN PROGRESS. this visits the product page and scrapes additional info (upc)
-    static async extract_products(product_list, get_product_req_config) {
+    /*static async extract_products(product_list) {
         let captcha = false;
         const promises = product_list.map(async (product) => {
           try {
-            const req_config = get_product_req_config(product);
+            const req_config = this.get_product_req_config(product);
             const product_data = this.scrape_product_page(req_config);
             
-            product.upc = product_data?.data?.data?.product?.upc;
+            product.upc = product_data?.data?.data?.product?.upc;//REPLACE WITH GET UPC ABSTRACT METHOD
             return { product, success: true };
 
           } catch (error) {
@@ -62,7 +81,7 @@ class Retailer {
             return pass.concat(await this.extract_products(fail));
         }
         return pass;
-    }
+    }*/
 
     static async scrape_products_from_sales_pages(get_req_config) {
         let req_config = get_req_config();
@@ -74,7 +93,7 @@ class Retailer {
             const promises = this.scrape_sales_page(req_config);
             product_promises.push(promises);
             console.log(page_num + "/" + max_page);
-            if (page_num % 5 === 0) {
+            if (max_page > 20 && page_num % 5 === 0) {
                 await Promise.all(product_promises);
             }
         }
@@ -88,12 +107,12 @@ class Retailer {
         
     }
 
-    static get_urls_to_fetch() {
-
-    }
-
     static async scrape_product_page(req_config) {
         const response = await this.make_axios_request(req_config);
+        if (!response) {
+            return undefined;
+        }
+        const raw_product_data = response.data;
         const product_data = this.parse_product_response(response);
         return product_data;
     }

@@ -36,11 +36,18 @@ app.get('/api/activate/:retailer/:fn', async (req, res) => {
     const key = req.params.retailer;
     const fn = req.params.fn;
     const retailer = retailMap[key];
-    const products = await retailer[fn]();
-    const promises = products.map(product => Template.render_product_card(product));
+    const raw_products = await retailer[fn]();
+    console.log(raw_products.slice(0,50));
+    const finished_products = await retailer.extract_products(raw_products.slice(0, 30));
+    console.log(finished_products);
+    
+    const promises = raw_products.map(product => Template.render_product_card(product));
     const product_cards = await Promise.all(promises);
     res.send(product_cards.join(''));
+    
+    //res.send(finished_products.join(''));
 });
+
 app.get('/nav-toggle', async (req, res) => {
     const html = `<input id="nav-toggle" type="checkbox" class="mobile-nav-toggle"></input>`;
     res.send(html);
