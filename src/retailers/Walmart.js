@@ -21,7 +21,10 @@ class Walmart extends Retailer {
     }
     //overriding abstract method
     static parse_product_response(response) {
-        return response.data;
+        let data = {};
+        const upc = response.data.data.product.upc;
+        data.upc = upc;
+        return data;
     }
     //overriding abstract method
     static parse_max_page_response(response) {

@@ -16,8 +16,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-
-let retailer;
+let sent_products_index = 0;
+const generated_products = [];
 //ROUTES
 app.get('/api', async (req, res) => {
     const retailers = Object.keys(retailMap);
@@ -32,6 +32,7 @@ app.get('/api/get-menu/:retailer', async (req, res) => {
     const buttons = await ejs.renderFile('views/retail-category.ejs', {options, retailer:key});
     res.send(buttons);
 });
+//CURRENTLY A SANDBOX
 app.get('/api/activate/:retailer/:fn', async (req, res) => { 
     const key = req.params.retailer;
     const fn = req.params.fn;
@@ -48,34 +49,21 @@ app.get('/api/activate/:retailer/:fn', async (req, res) => {
     //res.send(finished_products.join(''));
 });
 
+app.post('/add-product', (req, res) => {
+    const product = req.body;
+    generated_products.push(product);
+    res.status(200).json({ message: 'Data received successfully' });
+});
+
+app.get('/generated-products', (req, res) => {
+    const products_to_send = generated_products.slice(sent_products_index);
+    sent_products_index += products_to_send.length;
+    res.send(products_to_send);
+});
+
 app.get('/nav-toggle', async (req, res) => {
     const html = `<input id="nav-toggle" type="checkbox" class="mobile-nav-toggle"></input>`;
     res.send(html);
-});
-
-app.post("/retailer_menu", (req, res) => {
-    const retailer_name = req.body.retailer;
-    retailer = retailMap[retailer_name];
-    res.send(retailer.get_menu());
-});
-
-app.post("/menu_selection", async (req, res) => {
-    const selection = req.body.selection;
-    const options = retailer.get_menu_options();
-    const products = await retailer[options[selection]]();
-
-    const promises = products.map(product => Template.render_product_card(product));
-    const product_cards = await Promise.all(promises);
-    res.send(product_cards.join(''));
-});
-
-app.post('/add-product', (req, res) => {
-    try {
-        const new_product = new Product.create(req.body);
-        console.log(new_product);
-    } catch(error){
-        console.log(error.message);
-    }
 });
 
 const uri = "mongodb+srv://quanicus:<password>@cluster0.tlzyhfc.mongodb.net/?retryWrites=true&w=majority";

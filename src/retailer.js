@@ -36,52 +36,26 @@ class Retailer {
         let finished_products = [];
         for (const [index, product] of raw_product_list.entries()) {
             const product_req_config = this.get_product_req_config(product);
-            const product_data_promise = this.scrape_product_page(product_req_config);
-            finished_products.push(product_data_promise);
+            const product_data = await this.scrape_product_page(product_req_config);
+            const finished_product = Object.assign({}, product, product_data);
+            finished_products.push(finished_product);
+            //axios.post('/add-product', {finished_product});
+            const response = await this.upload_finished_product(finished_product);
             console.log("extracting " + index + "/" + raw_product_list.length);
             
-            if (index % 5 === 0) {
-                await Promise.all(finished_products);
-            }
         }
-        
-        await Promise.all(finished_products);
         return finished_products;
     }
-    //IN PROGRESS. this visits the product page and scrapes additional info (upc)
-    /*static async extract_products(product_list) {
-        let captcha = false;
-        const promises = product_list.map(async (product) => {
-          try {
-            const req_config = this.get_product_req_config(product);
-            const product_data = this.scrape_product_page(req_config);
-            
-            product.upc = product_data?.data?.data?.product?.upc;//REPLACE WITH GET UPC ABSTRACT METHOD
-            return { product, success: true };
 
-          } catch (error) {
-            if (error.response) {
-              console.log(error.response.status);
-              captcha = true;
-            }
-            return { product, success: false };
-          }
-        });
-      
-        const results = await Promise.all(promises);
-      
-        const pass = results.filter((result) => result.success).map((result) => result.product);
-        const fail = results.filter((result) => !result.success).map((result) => result.product);
-      
-        console.log(`pass:${pass.length}, fail: ${fail.length}`);
-      
-        if (captcha) {
-          // Pause and wait to clear captcha
-            await this.waitForUserInput(); // Wait for user input
-            return pass.concat(await this.extract_products(fail));
+    static async upload_finished_product(product) {
+        const serverUrl = `http://localhost:${process.env.PORT || 3000}/add-product`;
+        const config = {
+            method: 'post',
+            url: serverUrl,
+            data: product
         }
-        return pass;
-    }*/
+        this.make_axios_request(config);
+    }
 
     static async scrape_products_from_sales_pages(get_req_config) {
         let req_config = get_req_config();
@@ -112,7 +86,6 @@ class Retailer {
         if (!response) {
             return undefined;
         }
-        const raw_product_data = response.data;
         const product_data = this.parse_product_response(response);
         return product_data;
     }
