@@ -38,9 +38,11 @@ app.get('/api/activate/:retailer/:fn', async (req, res) => {
     const fn = req.params.fn;
     const retailer = retailMap[key];
     const raw_products = await retailer[fn]();
-    console.log(raw_products.slice(0,50));
-    const finished_products = await retailer.extract_products(raw_products.slice(0, 30));
+    //console.log(raw_products.slice(0,10));
+    const finished_products = await retailer.extract_products(raw_products.slice(0, 10));
+    //const prod = finished_products[0];
     console.log(finished_products);
+    //const doc = prod.asins;
     
     const promises = raw_products.map(product => Template.render_product_card(product));
     const product_cards = await Promise.all(promises);
@@ -50,8 +52,16 @@ app.get('/api/activate/:retailer/:fn', async (req, res) => {
 });
 
 app.post('/add-product', (req, res) => {
+    //TODO filter out products
     const product = req.body;
     generated_products.push(product);
+    console.log('from add-product');
+    if(product.asins === 'no matching items') {
+        console.log('no matches');
+    } else {
+        console.log(product);
+    }
+    
     res.status(200).json({ message: 'Data received successfully' });
 });
 

@@ -1,5 +1,6 @@
 import axios from "axios";
 import Template from "./template.js";
+import puppeteer from "puppeteer";
 
 class Retailer {
 
@@ -33,17 +34,37 @@ class Retailer {
     }
 
     static async extract_products(raw_product_list) {
+        console.log('extracting');
+        const browser = await puppeteer.launch({headless:'new'});
+        const page = await browser.newPage();
+        console.log('booting up');
         let finished_products = [];
         for (const [index, product] of raw_product_list.entries()) {
             const product_req_config = this.get_product_req_config(product);
             const product_data = await this.scrape_product_page(product_req_config);
             const finished_product = Object.assign({}, product, product_data);
+            //console.log(finished_product);
+            //skip if no upc found
+            if (!finished_product.upc) { continue; }
+            console.log('checkin amzn');
+            //COMPARE TO AMAZON
+            const amzn_url = "https://www.amazon.com/s?k=" + finished_product.upc;
+            console.log(amzn_url);
+            await page.goto(amzn_url);
+            const asins = await this.extract_amzn_asins(page);
+            //skip if no matching amzon products
+            if (!asins) { continue; }
+
+            finished_product.asins = asins;
             finished_products.push(finished_product);
-            //axios.post('/add-product', {finished_product});
+            
+            //SEND RESULTS TO SERVER
             const response = await this.upload_finished_product(finished_product);
             console.log("extracting " + index + "/" + raw_product_list.length);
             
         }
+        page.close();
+        browser.close();
         return finished_products;
     }
 
@@ -55,6 +76,40 @@ class Retailer {
             data: product
         }
         this.make_axios_request(config);
+    }
+
+    static async extract_amzn_asins(page) {
+        //const content = await page.content();
+        //console.log(content);
+        //return content;
+        const data = await page.evaluate(() => {
+            const not_found = document.querySelector('div[tabindex="0"] .a-row:first-of-type span:first-of-type');
+            if (not_found && not_found.textContent === 'No results for ') { return 'no matching items'};
+            const elements = document.querySelectorAll('.s-search-results > div[data-asin]:not([data-asin=""])');
+            if (!elements) { return undefined; }
+
+            let data = [];
+            elements.forEach((element) => {
+                const asin = element.getAttribute('data-asin');
+                const price_element = element.querySelector('.a-price .a-offscreen');
+                const price = price_element ? price_element.textContent : '';
+                if (price_element) {
+                    data.push({
+                    asin: asin,
+                    price: price_element.textContent
+                });
+                }
+                
+                /*const attributes = element.attributes;
+                let attribute_names = [];
+                for (let i = 0; i < attributes.length; i++) {
+                    attribute_names.push(attributes[i].name)
+                }
+                data.push(attribute_names);*/
+            });
+            return data;
+        });
+        return data;
     }
 
     static async scrape_products_from_sales_pages(get_req_config) {
@@ -74,7 +129,7 @@ class Retailer {
         const products = await Promise.all(product_promises);
         return products.flat();
     }
-
+    
     static async scrape_sales_page(req_config) {
         const response = await this.make_axios_request(req_config);
         return this.parse_sales_response(response);
