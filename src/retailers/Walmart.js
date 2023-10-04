@@ -10,12 +10,13 @@ class Walmart extends Retailer {
         const products = raw_products
         .filter(product => product.canonicalUrl && product.priceInfo.currentPrice)
         .map(product => {
-            let data = {};
-            data.price = product.priceInfo.currentPrice.price;
-            data.url = this.domain + product.canonicalUrl;
-            data.name = product.name;
-            data.pid = product.usItemId;
-            return data;
+            let Walmart = {};
+            let source = {Walmart};
+            Walmart.price = product.priceInfo.currentPrice.price;
+            Walmart.url = this.domain + product.canonicalUrl;
+            Walmart.name = product.name;
+            Walmart.pid = product.usItemId;
+            return {source};
         });
         return products;
     }
@@ -29,6 +30,7 @@ class Walmart extends Retailer {
     //overriding abstract method
     static parse_max_page_response(response) {
         return response.data.data.search.searchResult.paginationV2.maxPage;
+        
     }
     //overriding abstract method
     static get_menu_options() {
@@ -45,7 +47,7 @@ class Walmart extends Retailer {
     }
     //
 
-    static get_sales_page_req_config(page_num = 1) {
+    static get_sales_page_req_config(page_num = 2) {
         return {
             method: 'get',
             maxBodyLength: Infinity,
@@ -86,7 +88,7 @@ class Walmart extends Retailer {
         };
     }
 
-    static get_flash_page_req_config(page_num = 1) { 
+    static get_flash_page_req_config(page_num = 2) { 
         return {
             method: 'get',
             maxBodyLength: Infinity,
@@ -127,12 +129,13 @@ class Walmart extends Retailer {
 
     static get_product_req_config(product) { 
 
-        const pid = product.pid;
-        const pname = product.url.split('/')[4];
+        const pid = product.source.Walmart.pid;
+        const url = product.source.Walmart.url;
+        const pname = url.split('/')[4];
         return {
             method: 'get',
             maxBodyLength: Infinity,
-            url: `https://www.walmart.com/orchestra/pdp/graphql/ItemById/c3d80077e3b6617fed4db76123bdd344d837dabd7bd14d8f89a1aad7bf14f62f/ip/${product.pid}?variables=%7B%22channel%22%3A%22WWW%22%2C%22version%22%3A%22v1%22%2C%22pageType%22%3A%22ItemPageGlobal%22%2C%22tenant%22%3A%22WM_GLASS%22%2C%22tempo%22%3A%7B%22targeting%22%3A%22%257B%2522userState%2522%253A%2522loggedIn%2522%257D%22%2C%22params%22%3A%5B%7B%22key%22%3A%22expoVars%22%2C%22value%22%3A%22expoVariationValue%22%7D%2C%7B%22key%22%3A%22expoVars%22%2C%22value%22%3A%22expoVariationValue2%22%7D%5D%7D%2C%22p13nCls%22%3A%7B%22pageId%22%3A%22${product.pid}%22%2C%22p13NCallType%22%3A%22ATF%22%2C%22userClientInfo%22%3A%7B%22isZipLocated%22%3Atrue%2C%22callType%22%3A%22CLIENT%22%7D%2C%22userReqInfo%22%3A%7B%22refererContext%22%3A%7B%22source%22%3A%22itempage%22%2C%22query%22%3A%22%22%7D%2C%22isMoreOptionsTileEnabled%22%3Atrue%7D%7D%2C%22iId%22%3A%22${product.pid}%22%2C%22layout%22%3A%5B%22itemDesktop2%22%5D%2C%22p13N%22%3A%7B%22userClientInfo%22%3A%7B%22isZipLocated%22%3Atrue%2C%22deviceType%22%3A%22desktop%22%2C%22callType%22%3A%22CLIENT%22%7D%2C%22userReqInfo%22%3A%7B%22refererContext%22%3A%7B%22source%22%3A%22itempage%22%7D%2C%22pageUrl%22%3A%22%2Fip%2F${pname}%2F${product.pid}%22%7D%7D%2C%22cSId%22%3A%22%22%2C%22sSId%22%3Anull%2C%22fBBAd%22%3Atrue%2C%22fSL%22%3Afalse%2C%22fIdml%22%3Atrue%2C%22fMrkDscrp%22%3Afalse%2C%22fRev%22%3Atrue%2C%22fFit%22%3Atrue%2C%22fSeo%22%3Atrue%2C%22fP13%22%3Atrue%2C%22fAff%22%3Atrue%2C%22fMq%22%3Atrue%2C%22fGalAd%22%3Afalse%2C%22fSCar%22%3Atrue%2C%22fBB%22%3Atrue%2C%22eItIb%22%3Atrue%2C%22fIlc%22%3Atrue%2C%22bbe%22%3Atrue%2C%22fSId%22%3Atrue%2C%22eSb%22%3Atrue%2C%22eCc%22%3Atrue%2C%22enableRelatedSearch%22%3Atrue%2C%22enableDetailedBeacon%22%3Afalse%2C%22enableMultiSave%22%3Afalse%2C%22includeLabelV1%22%3Atrue%2C%22sV%22%3Afalse%2C%22sVC%22%3Afalse%2C%22enableBnplMessage%22%3Afalse%2C%22vFId%22%3Anull%2C%22pAdd%22%3Anull%2C%22sFId%22%3Anull%2C%22enableSizePredictor%22%3Afalse%2C%22sizePredictorInput%22%3Anull%7D`,
+            url: `https://www.walmart.com/orchestra/pdp/graphql/ItemById/c3d80077e3b6617fed4db76123bdd344d837dabd7bd14d8f89a1aad7bf14f62f/ip/${pid}?variables=%7B%22channel%22%3A%22WWW%22%2C%22version%22%3A%22v1%22%2C%22pageType%22%3A%22ItemPageGlobal%22%2C%22tenant%22%3A%22WM_GLASS%22%2C%22tempo%22%3A%7B%22targeting%22%3A%22%257B%2522userState%2522%253A%2522loggedIn%2522%257D%22%2C%22params%22%3A%5B%7B%22key%22%3A%22expoVars%22%2C%22value%22%3A%22expoVariationValue%22%7D%2C%7B%22key%22%3A%22expoVars%22%2C%22value%22%3A%22expoVariationValue2%22%7D%5D%7D%2C%22p13nCls%22%3A%7B%22pageId%22%3A%22${pid}%22%2C%22p13NCallType%22%3A%22ATF%22%2C%22userClientInfo%22%3A%7B%22isZipLocated%22%3Atrue%2C%22callType%22%3A%22CLIENT%22%7D%2C%22userReqInfo%22%3A%7B%22refererContext%22%3A%7B%22source%22%3A%22itempage%22%2C%22query%22%3A%22%22%7D%2C%22isMoreOptionsTileEnabled%22%3Atrue%7D%7D%2C%22iId%22%3A%22${pid}%22%2C%22layout%22%3A%5B%22itemDesktop2%22%5D%2C%22p13N%22%3A%7B%22userClientInfo%22%3A%7B%22isZipLocated%22%3Atrue%2C%22deviceType%22%3A%22desktop%22%2C%22callType%22%3A%22CLIENT%22%7D%2C%22userReqInfo%22%3A%7B%22refererContext%22%3A%7B%22source%22%3A%22itempage%22%7D%2C%22pageUrl%22%3A%22%2Fip%2F${pname}%2F${pid}%22%7D%7D%2C%22cSId%22%3A%22%22%2C%22sSId%22%3Anull%2C%22fBBAd%22%3Atrue%2C%22fSL%22%3Afalse%2C%22fIdml%22%3Atrue%2C%22fMrkDscrp%22%3Afalse%2C%22fRev%22%3Atrue%2C%22fFit%22%3Atrue%2C%22fSeo%22%3Atrue%2C%22fP13%22%3Atrue%2C%22fAff%22%3Atrue%2C%22fMq%22%3Atrue%2C%22fGalAd%22%3Afalse%2C%22fSCar%22%3Atrue%2C%22fBB%22%3Atrue%2C%22eItIb%22%3Atrue%2C%22fIlc%22%3Atrue%2C%22bbe%22%3Atrue%2C%22fSId%22%3Atrue%2C%22eSb%22%3Atrue%2C%22eCc%22%3Atrue%2C%22enableRelatedSearch%22%3Atrue%2C%22enableDetailedBeacon%22%3Afalse%2C%22enableMultiSave%22%3Afalse%2C%22includeLabelV1%22%3Atrue%2C%22sV%22%3Afalse%2C%22sVC%22%3Afalse%2C%22enableBnplMessage%22%3Afalse%2C%22vFId%22%3Anull%2C%22pAdd%22%3Anull%2C%22sFId%22%3Anull%2C%22enableSizePredictor%22%3Afalse%2C%22sizePredictorInput%22%3Anull%7D`,
             headers: { 
               'authority': 'www.walmart.com', 
               'accept': 'application/json', 
@@ -145,7 +148,7 @@ class Walmart extends Retailer {
               'dpr': '2', 
               'ip-referer': 'https://www.walmart.com/ip/CRUA-24-165Hz-180Hz-Curved-Gaming-Monitor-FHD-1080P-Frameless-Computer-Monitor-AMD-FreeSync-Low-Motion-Blur-DP-HDMI-Port-Black/1277532195?athbdg=L1900', 
               'is-variant-fetch': 'false', 
-              'referer': product.url, 
+              'referer': url, 
               'sec-ch-ua': '"Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"', 
               'sec-ch-ua-mobile': '?0', 
               'sec-ch-ua-platform': '"macOS"', 
@@ -156,7 +159,7 @@ class Walmart extends Retailer {
               'traffic-type': 'Internal', 
               'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36', 
               'wm_mp': 'true', 
-              'wm_page_url': product.url, 
+              'wm_page_url': url, 
               'wm_qos.correlation_id': 'kGkyPX5Nk2xhBFtE4FLOz3X2H8IoBq8MnGeH', 
               'x-apollo-operation-name': 'ItemById', 
               'x-enable-server-timing': '1', 
@@ -165,7 +168,7 @@ class Walmart extends Retailer {
               'x-o-ccm': 'server', 
               'x-o-correlation-id': 'kGkyPX5Nk2xhBFtE4FLOz3X2H8IoBq8MnGeH', 
               'x-o-gql-query': 'query ItemById', 
-              'x-o-item-id': product.pid, 
+              'x-o-item-id': pid, 
               'x-o-mart': 'B2C', 
               'x-o-platform': 'rweb', 
               'x-o-platform-version': 'us-web-1.102.0-e22f5c1-0928T0323', 

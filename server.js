@@ -7,6 +7,15 @@ import Template from "./src/template.js";
 import bodyParser from "body-parser";
 import ejs from "ejs";
 
+mongoose.connect("mongodb+srv://quanicus:Muahahamongo1!@cluster0.tlzyhfc.mongodb.net/Project-RockStone?retryWrites=true&w=majority")
+.then(() => {
+    console.log('we mongoated up in this bitch');
+    app.listen(process.env.PORT || 3000, () => {
+        console.log('waddup bitches node API app runnin the 3000s foo');
+    });
+}).catch(error => {
+    console.log(error);
+});
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -51,15 +60,16 @@ app.get('/api/activate/:retailer/:fn', async (req, res) => {
     //res.send(finished_products.join(''));
 });
 
-app.post('/add-product', (req, res) => {
+app.post('/api/add-product', (req, res) => {
     //TODO filter out products
     const product = req.body;
-    generated_products.push(product);
+    
     console.log('from add-product');
     if(product.asins === 'no matching items') {
         console.log('no matches');
     } else {
         console.log(product);
+        generated_products.push(product);
     }
     
     res.status(200).json({ message: 'Data received successfully' });
@@ -76,23 +86,4 @@ app.get('/nav-toggle', async (req, res) => {
     res.send(html);
 });
 
-const uri = "mongodb+srv://quanicus:<password>@cluster0.tlzyhfc.mongodb.net/?retryWrites=true&w=majority";
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-
-mongoose.connect("mongodb+srv://quanicus:Muahahamongo1!@cluster0.tlzyhfc.mongodb.net/Project-RockStone?retryWrites=true&w=majority")
-.then(() => {
-    console.log('we mongoated up in this bitch');
-    app.listen(process.env.PORT || 3000, () => {
-        console.log('waddup bitches node API app runnin the 3000s foo');
-    });
-}).catch(error => {
-    console.log(error);
-});

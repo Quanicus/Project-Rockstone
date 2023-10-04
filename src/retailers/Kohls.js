@@ -32,7 +32,7 @@ class Kohls extends Retailer {
         const products = raw_products.map(product => {
             let data = {};
             data.name = product.productTitle;
-            data.price = product.yourPriceInfo.yourPrice;
+            data.price = product.yourPriceInfo?.yourPrice;
             data.url = this.domain + product.seoURL;
             data.pid = product.webID;
             return data;
