@@ -1,21 +1,10 @@
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import retailMap from "./src/retailMap.js";
 import Template from "./src/template.js";
 import bodyParser from "body-parser";
 import ejs from "ejs";
-
-mongoose.connect("mongodb+srv://quanicus:Muahahamongo1!@cluster0.tlzyhfc.mongodb.net/Project-RockStone?retryWrites=true&w=majority")
-.then(() => {
-    console.log('we mongoated up in this bitch');
-    app.listen(process.env.PORT || 3000, () => {
-        console.log('waddup bitches node API app runnin the 3000s foo');
-    });
-}).catch(error => {
-    console.log(error);
-});
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -24,6 +13,39 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
+
+const uri = "mongodb+srv://quanicus:Muahahamongo1!@cluster0.tlzyhfc.mongodb.net/?retryWrites=true&w=majority";
+const db_name = 'Project-Rockstone';
+const port = process.env.PORT || 3000;
+let db;
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function run() {
+
+    client.connect().then(async (client) => {
+        await client.db("admin").command({ ping: 1 });
+        db = client.db(db_name);
+        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+
+        app.listen(port, () => {
+            console.log(`Server is running on port ${port}`);
+        });
+    }).catch((error) => {
+        console.error('Error connecting to MongoDB:', error);
+    });
+}
+run();
+
+
+
 
 let sent_products_index = 0;
 const generated_products = [];
@@ -46,18 +68,14 @@ app.get('/api/activate/:retailer/:fn', async (req, res) => {
     const key = req.params.retailer;
     const fn = req.params.fn;
     const retailer = retailMap[key];
-    const raw_products = await retailer[fn]();
-    //console.log(raw_products.slice(0,10));
+    let raw_products = await retailer[fn]();
+    //TODO: REMOVE BLACKLISTED FROM RAW PRODUCTS LIST
+    raw_products = await remove_blacklisted(raw_products);
+
     const finished_products = await retailer.extract_products(raw_products.slice(0, 10));
-    //const prod = finished_products[0];
+
     console.log(finished_products);
-    //const doc = prod.asins;
-    
-    const promises = raw_products.map(product => Template.render_product_card(product));
-    const product_cards = await Promise.all(promises);
-    res.send(product_cards.join(''));
-    
-    //res.send(finished_products.join(''));
+
 });
 
 app.post('/api/add-product', (req, res) => {
@@ -86,4 +104,29 @@ app.get('/nav-toggle', async (req, res) => {
     res.send(html);
 });
 
-
+async function remove_blacklisted(products) {
+    const promises = products.map(async (product) => {
+        const query = {
+            source: {
+                $elemMatch: {
+                    retailer: product.source.retailer,
+                    pid: product.source.pid,
+                },
+            },
+        };
+  
+        try {
+            const blacklist = db.collection('blacklist');
+            const blacklisted = await blacklist.findOne(query);
+            return !blacklisted;
+        
+        } catch (error) {
+            console.error('Error querying the database:', error);
+            return true; // Assume it's not blacklisted in case of an error
+        }
+    });
+  
+    const results = await Promise.all(promises);
+    return products.filter((_, index) => results[index]);
+  }
+  

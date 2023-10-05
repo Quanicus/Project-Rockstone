@@ -120,7 +120,7 @@ class Retailer {
             product_promises.push(promises);
             console.log(page_num + "/" + max_page);
 
-            if (max_page > 20 && page_num % 5 === 0) {
+            if (page_num % 5 === 0) {
                 await Promise.all(product_promises);
             }
         }

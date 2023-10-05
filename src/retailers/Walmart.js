@@ -10,12 +10,13 @@ class Walmart extends Retailer {
         const products = raw_products
         .filter(product => product.canonicalUrl && product.priceInfo.currentPrice)
         .map(product => {
-            let Walmart = {};
-            let source = {Walmart};
-            Walmart.price = product.priceInfo.currentPrice.price;
-            Walmart.url = this.domain + product.canonicalUrl;
-            Walmart.name = product.name;
-            Walmart.pid = product.usItemId;
+
+            let source = {};
+            source.retailer = 'Walmart';
+            source.price = product.priceInfo.currentPrice.price;
+            source.url = this.domain + product.canonicalUrl;
+            source.name = product.name;
+            source.pid = product.usItemId;
             return {source};
         });
         return products;
@@ -129,8 +130,8 @@ class Walmart extends Retailer {
 
     static get_product_req_config(product) { 
 
-        const pid = product.source.Walmart.pid;
-        const url = product.source.Walmart.url;
+        const pid = product.source.pid;
+        const url = product.source.url;
         const pname = url.split('/')[4];
         return {
             method: 'get',
