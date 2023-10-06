@@ -85,19 +85,21 @@ class Retailer {
         const amzn_url = "https://www.amazon.com/s?k=" + upc;
         await page.goto(amzn_url);
         const data = await page.evaluate(() => {
+
             const not_found = document.querySelector('div[tabindex="0"] .a-row:first-of-type span:first-of-type');
             if (not_found && not_found.textContent === 'No results for ') { return 'no matching items'};
-            const elements = document.querySelectorAll('.s-search-results > div[data-asin]:not([data-asin=""])');
+            
+            const elements = document.querySelectorAll('.s-result-list div[data-asin]:not(.AdHolder)');
             if (!elements) { return 'asin not detected'; }
 
             let data = [];
             elements.forEach((element) => {
                 const asin = element.getAttribute('data-asin');
                 const price_element = element.querySelector('.a-price .a-offscreen');
-                if (price_element) {
+                if (asin) {
                     data.push({
                     asin: asin,
-                    price: price_element ? price_element.textContent : ''
+                    price: price_element ? price_element.textContent : 'click for price'
                 });
                 }
             });

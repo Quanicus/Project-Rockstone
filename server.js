@@ -70,7 +70,7 @@ app.post('/api/add-product', (req, res) => {
     res.status(200).json({ message: 'Data received successfully' });
 });
 
-app.get('/generated-products', (req, res) => {
+app.get('/api/generated-products', (req, res) => {
     const products_to_send = generated_products.slice(sent_products_index);
     sent_products_index += products_to_send.length;
     res.send(products_to_send);
