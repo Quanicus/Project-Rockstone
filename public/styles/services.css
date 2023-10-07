@@ -40,7 +40,6 @@
 .chevron {
     width: 0;
     height: 0;
-    padding-bottom: 2em;
     border-left: 20px solid transparent;
     border-right: 20px solid transparent;
     border-bottom: 20px solid red;
@@ -50,16 +49,29 @@
 
 .toggle-checkbox:checked + .toggle-label .chevron {
     transform: rotateX(180deg);
-    padding-top: 1em; 
+    margin-top: 2em; 
 } 
 
 .product-card {
     width: 100%;
 } 
 
+.brief-page {
+
+    flex-direction: column; 
+    gap: 2em; 
+    align-items: center; 
+    width: 90%;
+}
+
+#brief-nav:has(#brief-radio1:checked) ~ #brief-page1 {
+    display: none;
+}
+
 #mission-briefing {
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
     transform: translateY(0);
     height: 92vh;
     background: hsl(0 0% 0% /0.75);
@@ -69,7 +81,9 @@
     transform: translateY(-82vh);
     z-index: 40;
 }
-
+#brief-nav {
+    margin-bottom: 2em;
+}
 #load-bar {
     display: flex;
     width: min(80%, 7in);
