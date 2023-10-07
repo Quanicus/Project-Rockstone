@@ -50,7 +50,7 @@ app.get('/api/activate/:retailer/:fn', async (req, res) => {
     const retailer = retailMap[key];
     let raw_products = await retailer[fn]();
     //REMOVE BLACKLISTED FROM RAW PRODUCTS LIST
-    raw_products = await database.filter_through_blacklist(raw_products);
+    //raw_products = await database.filter_through_blacklist(raw_products);
     total_products = raw_products.length;
     retailer.extract_products(raw_products);
 });
@@ -62,7 +62,7 @@ app.post('/api/add-product', async (req, res) => {
     console.log('from add-product');
     if(product.asins === 'no matching items') {
         //add to blacklist
-        await database.add_to_blacklist(product);
+        //await database.add_to_blacklist(product);
         console.log('no matches');
         //console.log(product);
     } else {
