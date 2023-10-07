@@ -1,6 +1,7 @@
 import axios from "axios";
 import Template from "./template.js";
 import puppeteer from "puppeteer";
+import database from "./database.js";
 
 class Retailer {
 
@@ -41,29 +42,39 @@ class Retailer {
         console.log('booting up');
         let finished_products = [];
 
+        //
         for (const [index, product] of raw_product_list.entries()) {
+
+            console.log("extracting " + index + "/" + raw_product_list.length);
 
             const product_req_config = this.get_product_req_config(product);
             const product_data = await this.scrape_product_page(product_req_config);
+            if (!product_data) {
+                console.log('access denied');
+                continue;
+            };
             const finished_product = Object.assign({}, product, product_data);
 
             //skip if no upc found
-            if (!finished_product.upc) { continue; }
+            if (!finished_product.upc) { 
+                //ADD TO BLACKLIST
+                database.add_to_blacklist(product);
+                continue; 
+            }
 
+            //FILTER THROUGH BLACKLIST
+            const results = await database.filter_through_blacklist([finished_product]);
+            if (results.length === 0) {
+                continue;
+            }
 
-            //COMPARE TO AMAZON
-            
+            //GET AMAZON ASINS AND PRICE
             const asins = await this.extract_amzn_asins(page, finished_product.upc);
-            //skip if no matching amzon products
-            if (!asins) { continue; }
-
             finished_product.asins = asins;
             finished_products.push(finished_product);
             
             //SEND RESULTS TO SERVER
-            const response = await this.upload_finished_product(finished_product);
-            console.log("extracting " + index + "/" + raw_product_list.length);
-            
+            this.upload_finished_product(finished_product);
         }
         page.close();
         browser.close();
@@ -90,7 +101,6 @@ class Retailer {
             if (not_found && not_found.textContent === 'No results for ') { return 'no matching items'};
             
             const elements = document.querySelectorAll('.s-result-list div[data-asin]:not(.AdHolder)');
-            if (!elements) { return 'asin not detected'; }
 
             let data = [];
             elements.forEach((element) => {
@@ -112,6 +122,10 @@ class Retailer {
 
         let req_config = get_req_config(2);
         const max_page = await this.get_max_page(req_config);
+        if (!max_page) {
+            console.log('failed to obtain max_page');
+            return undefined;
+        }
         let product_promises = [];
 
         //flip through pages and scraping product data
@@ -133,21 +147,17 @@ class Retailer {
     static async scrape_sales_page(req_config) {
 
         const response = await this.make_axios_request(req_config);
-        return this.parse_sales_response(response);
+        return response ? this.parse_sales_response(response) : undefined;
     }
 
     static async scrape_product_page(req_config) {
         const response = await this.make_axios_request(req_config);
-        if (!response) {
-            return undefined;
-        }
-        const product_data = this.parse_product_response(response);
-        return product_data;
+        return response ? this.parse_product_response(response) : undefined;
     }
 
     static async get_max_page(req_config) {
         const response = await this.make_axios_request(req_config);
-        const max_page = this.parse_max_page_response(response);
+        const max_page = response ? this.parse_max_page_response(response) : undefined;
         return max_page;
     }
 

@@ -24,6 +24,7 @@ async function run() {
 }
 
 let sent_products_index = 0;
+let total_products = 0;
 const generated_products = [];
 //ROUTES
 app.get('/api', async (req, res) => {
@@ -41,27 +42,29 @@ app.get('/api/get-menu/:retailer', async (req, res) => {
 });
 //CURRENTLY A SANDBOX
 app.get('/api/activate/:retailer/:fn', async (req, res) => { 
+    //TODO SERVE INITIAL PRODUCT DISPLAY WITH LOADING BAR WHICH WILL REPLACE OUTERHTML OF APP-DISPLAY
+    const load_bar = await ejs.renderFile('views/result-display.ejs', {});
+    res.send(load_bar);
     const key = req.params.retailer;
     const fn = req.params.fn;
     const retailer = retailMap[key];
     let raw_products = await retailer[fn]();
-    //TODO: REMOVE BLACKLISTED FROM RAW PRODUCTS LIST
+    //REMOVE BLACKLISTED FROM RAW PRODUCTS LIST
     raw_products = await database.filter_through_blacklist(raw_products);
-
-    const finished_products = await retailer.extract_products(raw_products.slice(0, 10));
-
-    console.log(finished_products);
-
+    total_products = raw_products.length;
+    retailer.extract_products(raw_products);
 });
 
-app.post('/api/add-product', (req, res) => {
-    //TODO filter out products
+app.post('/api/add-product', async (req, res) => {
+    //filter out products
     const product = req.body;
     
     console.log('from add-product');
     if(product.asins === 'no matching items') {
         //add to blacklist
+        await database.add_to_blacklist(product);
         console.log('no matches');
+        //console.log(product);
     } else {
         console.log(product);
         generated_products.push(product);
@@ -70,10 +73,14 @@ app.post('/api/add-product', (req, res) => {
     res.status(200).json({ message: 'Data received successfully' });
 });
 
-app.get('/api/generated-products', (req, res) => {
+app.get('/api/generated-products', async (req, res) => {
     const products_to_send = generated_products.slice(sent_products_index);
     sent_products_index += products_to_send.length;
-    res.send(products_to_send);
+    let response = {products: products_to_send}
+    response.message = "extracting all the jazz";
+    response.progress = `${sent_products_index / total_products}`;
+    const load_bar = await ejs.renderFile('views/load-bar.ejs', response);
+    res.send(load_bar);
 });
 
 app.get('/nav-toggle', async (req, res) => {
