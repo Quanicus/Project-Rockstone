@@ -56,17 +56,27 @@
 } 
 
 .brief-page {
-
+    opacity: 0;
     flex-direction: column; 
     gap: 2em; 
     align-items: center; 
     width: 90%;
+    z-index: -1;
+    transition: opacity .5s ease-out;
 }
 
-#brief-nav:has(#brief-radio1:checked) ~ #brief-page1 {
-    display: none;
+#brief-page1:has(#brief-radio1:checked),
+#brief-page2:has(#brief-radio2:checked),
+#brief-page3:has(#brief-radio3:checked) {
+    opacity: 1;
+    z-index: 1;
 }
 
+.brief-radio {
+    width: 2em;
+    height: 3em;
+    background-color: white;
+}
 #mission-briefing {
     flex-direction: column;
     align-items: center;

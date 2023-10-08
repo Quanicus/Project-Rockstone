@@ -2,10 +2,6 @@
 <div class="menu-buttons" style="display:flex; gap:3em;">
     <% for (const option of options) { %>
         <button type="button" class="neon-button" hx-get="/api/activate/<%= retailer %>/<%= option.fn %>" hx-target="#app-display" hx-swap="outerHTML" hx-trigger="click">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
             <%= option.text_content %>
         </button>
     <% } %>

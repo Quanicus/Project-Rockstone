@@ -85,7 +85,7 @@ app.get('/api/generated-products', async (req, res) => {
 });
 
 app.get('/nav-toggle', async (req, res) => {
-    const html = `<input id="nav-toggle" type="checkbox" class="mobile-nav-toggle"></input>`;
+    const html = `<input id="nav-toggle" type="checkbox" class="mobile-nav-toggle hidden"></input>`;
     res.send(html);
 });
 

@@ -7,15 +7,12 @@
     z-index: 30;
 }
 
-.mobile-nav-toggle {
-    display: none;
-}
 
 .primary-navigation {
     padding: 0;
     margin: 0;
     background: hsl(0 0% 0% /0.75);
-    transform: translateX(100%);
+    
     transition: transform 350ms ease-out;
     
 }
@@ -27,7 +24,7 @@
     }
 }
 .primary-navigation label {
-    text-shadow: 0 0 20px white;
+    text-shadow: 0 0 0 white;
 }
 .primary-navigation span {
     font-family: "Futuristic";
@@ -51,36 +48,29 @@
         padding-block: 1.7em;
         padding-inline: clamp(3rem, 10vw, 10rem);
     }
+    #hamburgo {
+        display: none;
+    }
 }
 .mobile-nav-toggle:checked ~ .primary-navigation {
     transform: translateX(0%);
 }
 
-.mobile-nav-toggle {
-    display: block;
-    position: absolute;
-    background: url("../images/burger.svg");
-    background-repeat: no-repeat;
-    background-size: contain;
-    border: 0;
-    width: 2rem;
-    aspect-ratio: 1;
-    top: 2rem;
-    right: 2rem;
-    z-index: 9999;
-}
 .mobile-nav-toggle:checked {
     background: url("../images/burger.svg");
 }
 @media (max-width: 35em) {
     .primary-navigation {
+        transform: translateX(100%);
         --gap: 2.5em;
         position: fixed;
         inset: 0 0 0 30%;
         z-index: 1000;
         flex-direction: column;
-        padding: min(30vh, 10rem) 2rem;
-        
+        padding: min(30vh, 10rem) 2rem;  
+    }
+    #hamburgo {
+        display: block;
     }
    
     

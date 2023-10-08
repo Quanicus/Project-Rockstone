@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="styles/page.css">
         <link rel="stylesheet" href="styles/services.css">
         <link rel="stylesheet" href="styles/neon-button.css">
+        <link rel="stylesheet" href="styles/hamburgo.css">
         <script src="https://unpkg.com/htmx.org@1.9.5" 
             integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" 
             crossorigin="anonymous">
@@ -16,7 +17,8 @@
     </head>
     <body>
         <header class="primary-header flex">
-            <input id="nav-toggle" type="checkbox" class="mobile-nav-toggle">
+            <input id="nav-toggle" type="checkbox" class="mobile-nav-toggle hidden">
+            <label for="nav-toggle" id="hamburgo" class=""></label>
             <div class="logo"></div>
             <nav class="primary-navigation flex">
                 <label class="page-radio" for="home" hx-get="/nav-toggle" hx-trigger="click" hx-swap="outerHTML" hx-target="#nav-toggle">
@@ -100,21 +102,14 @@
 
             <div id="app-display" class="flex">
                 <button type="button" class="neon-button" hx-get="/api" hx-target="#app-display" hx-swap="innerHTML" hx-trigger="click">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
                     ACTIVATE PHANTOM PROTOCOL
                 </button>
             </div>
 
             <section id="mission-briefing" class="briefing flex">
+
                 <input type="checkbox" id="toggleCheckbox" class="toggle-checkbox hidden">
                 <label for="toggleCheckbox" class="toggle-label">
-                    <!-- <svg width="60px" height="60px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="white" class="bi bi-chevron-compact-up">
-                        <path fill-rule="evenodd" d="M7.776 5.553a.5.5 0 0 1 .448 0l6 3a.5.5 0 1 1-.448.894L8 6.56 2.224 9.447a.5.5 0 1 1-.448-.894l6-3z"/>
-                      </svg> -->
-                    
                     <svg class="chevron" width="48" height="60">
                         <filter id="white-glow" x="-5000%" y="-5000%" width="10000%" height="10000%">
                             <feFlood result="flood" flood-color="gold" flood-opacity="1"></feFlood>
@@ -130,6 +125,7 @@
                     </svg>
 
                 </label>
+
                 <div id="brief-page1" class="flex brief-page">
                     <h1>The ReconStar Initiative</h1>
 
@@ -138,13 +134,24 @@
                     Now it seems that everyone wants a piece of the proverbial inter-galaxtic commerce pie, as they latch onto Scamazon's fulfillment program to hawk their wares and fancy gadgets. When Scamazon was first established, its competetive pricing was the major appeal to consumers. However, today's shoppers crave the convenience of next-day delivery using their proprietary Prime-drive warp technology. A large percentage of the population can't be bothered to shop around competetive prices and reflexively smash the dopamine inducing 'buy now' button.
                     
                     The Phantom Protocol was implemented by Capt. Quan for the purpose of sourcing products to peddle on Scamazon's vast trade networks.</p>
+
+                    <input type="radio" id="brief-radio1" class="hidden" name="brief" value="brief1"/>
                 </div>
-                
+                <div id="brief-page2" class="flex brief-page">
+                    <h1>Lessons learnt</h1>
+                    <input type="radio" id="brief-radio2" class="hidden" name="brief" value="brief2"/>
+                </div>
+                <div id="brief-page3" class="flex brief-page">
+                    <h1>Technology</h1>
+                    <input type="radio" id="brief-radio3" class="hidden" name="brief" value="brief3"/>
+                </div>
+
                 <nav id="brief-nav" class="flex" style="gap: 3em;">
-                    <input type="radio" id="brief-radio1" class="brief-radio" name="brief" value="brief1" checked>
-                    <input type="radio" id="brief-radio2" class="brief-radio" name="brief" value="brief2">
-                    <input type="radio" id="brief-radio3" class="brief-radio" name="brief" value="brief3">
+                    <label for="brief-radio1" class="brief-radio"></label>
+                    <label for="brief-radio2" class="brief-radio"></label>
+                    <label for="brief-radio3" class="brief-radio"></label>
                 </nav>
+
             </section>
                 
         </section>
