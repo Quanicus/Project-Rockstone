@@ -1,0 +1,12 @@
+<div id="load-bar" hx-get="/api/generated-products" hx-trigger="every 1s" hx-swap="outerHTML">
+    <div id="load-progress" style="width:<%= progress %>"></div>
+    <div><%= message %></div>
+</div>
+
+<% for (const product of products) { %>
+    <div class="product-card">
+        <a href="<%= product.source.url %>" target="_blank"><%= product.source.name %></a>
+        <div>Current price: $<%= product.source.price %></div>
+        <div>UPC: <%= product.upc %></div>
+    </div>
+<% } %>

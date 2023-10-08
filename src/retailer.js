@@ -47,7 +47,7 @@ class Retailer {
 
             console.log("extracting " + index + "/" + raw_product_list.length);
 
-            const product_req_config = this.get_product_req_config(product);
+            /*const product_req_config = this.get_product_req_config(product);
             const product_data = await this.scrape_product_page(product_req_config);
             if (!product_data) {
                 console.log('access denied');
@@ -74,7 +74,8 @@ class Retailer {
             finished_products.push(finished_product);
             
             //SEND RESULTS TO SERVER
-            this.upload_finished_product(finished_product);
+            this.upload_finished_product(finished_product);*/
+            this.upload_finished_product(product);
         }
         page.close();
         browser.close();

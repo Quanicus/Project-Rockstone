@@ -60,7 +60,7 @@ app.post('/api/add-product', async (req, res) => {
     const product = req.body;
     
     console.log('from add-product');
-    if(product.asins === 'no matching items') {
+    if(product.asins && product.asins === 'no matching items') {
         //add to blacklist
         //await database.add_to_blacklist(product);
         console.log('no matches');
@@ -79,7 +79,8 @@ app.get('/api/generated-products', async (req, res) => {
     let response = {products: products_to_send}
     response.message = "extracting all the jazz";
     response.progress = `${sent_products_index / total_products}`;
-    const load_bar = await ejs.renderFile('views/load-bar.ejs', response);
+    //const load_bar = await ejs.renderFile('views/load-bar.ejs', response);
+    const load_bar = await ejs.renderFile('views/test-bar.ejs', response);
     res.send(load_bar);
 });
 
