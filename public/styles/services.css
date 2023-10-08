@@ -38,12 +38,13 @@
 }
   
 .chevron {
+    overflow: visible;
     transform-origin: center center; /* Set the transform origin to the center */
     transition: transform .7s ease-in-out;
 }
 .chevron:hover #chev-poly{
     fill: gold;
-    filter: drop-shadow(0 0 0px rgba(255, 215, 0, 1));
+    filter: url(#white-glow)
 }
 .toggle-checkbox:checked + .toggle-label .chevron {
     transform: rotateX(180deg);

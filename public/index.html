@@ -116,6 +116,16 @@
                       </svg> -->
                     
                     <svg class="chevron" width="48" height="60">
+                        <filter id="white-glow" x="-5000%" y="-5000%" width="10000%" height="10000%">
+                            <feFlood result="flood" flood-color="gold" flood-opacity="1"></feFlood>
+                            <feComposite in="flood" result="mask" in2="SourceGraphic" operator="in"></feComposite>
+                            <feMorphology in="mask" result="dilated" operator="dilate" radius="2"></feMorphology>
+                            <feGaussianBlur in="dilated" result="blurred" stdDeviation="5"></feGaussianBlur>
+                            <feMerge>
+                                <feMergeNode in="blurred"></feMergeNode>
+                                <feMergeNode in="SourceGraphic"></feMergeNode>
+                            </feMerge>
+                        </filter>
                         <polygon id="chev-poly" fill="white" transform="scale(1.5)" points="28.6,22.9 16,10.2 3.4,22.9 2.6,22.1 16,8.8 29.4,22.1  "/>
                     </svg>
 
@@ -125,9 +135,9 @@
 
                     <p>It is known that intersteller trade within the entirety of our current traversible star cluster is largely dominated by Scamazon's Jimmothy Bezinos and his gang of inter-galactic goons. 
                     
-                    Now it seems that everyone wants a piece as they latch onto Scamazon's affiliate program to peddle their mass-produced gagets. When Scamazon was first established, its competetive pricing was the major appeal to consumers. However, today's shoppers crave the convenience of next-day delivery using their proprietary Prime-drive warp technology. A large percentage of the population don't even bother to shop around for more competetive pricing and reflexively smash the dopamine inducing 'buy now' button.
+                    Now it seems that everyone wants a piece of the proverbial inter-galaxtic commerce pie, as they latch onto Scamazon's fulfillment program to hawk their wares and fancy gadgets. When Scamazon was first established, its competetive pricing was the major appeal to consumers. However, today's shoppers crave the convenience of next-day delivery using their proprietary Prime-drive warp technology. A large percentage of the population can't be bothered to shop around competetive prices and reflexively smash the dopamine inducing 'buy now' button.
                     
-                    The Phantom Protocol was implemented by Capt. Quan for the purpose of obtaining valuable intel of competing retailers' pricing.</p>
+                    The Phantom Protocol was implemented by Capt. Quan for the purpose of sourcing products to peddle on Scamazon's vast trade networks.</p>
                 </div>
                 
                 <nav id="brief-nav" class="flex" style="gap: 3em;">

@@ -26,7 +26,9 @@
         backdrop-filter: blur(1rem);
     }
 }
-
+.primary-navigation label {
+    text-shadow: 0 0 20px white;
+}
 .primary-navigation span {
     font-family: "Futuristic";
     margin-inline-end: .7em;
@@ -57,7 +59,6 @@
 .mobile-nav-toggle {
     display: block;
     position: absolute;
-    /**/
     background: url("../images/burger.svg");
     background-repeat: no-repeat;
     background-size: contain;
