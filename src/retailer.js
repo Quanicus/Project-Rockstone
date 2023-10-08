@@ -84,7 +84,7 @@ class Retailer {
 
 
     static async upload_finished_product(product) {
-        const serverUrl = `http://localhost:${process.env.PORT || 3000}/api/add-product`;
+        const serverUrl = `/api/add-product`;
         const config = {
             method: 'post',
             url: serverUrl,

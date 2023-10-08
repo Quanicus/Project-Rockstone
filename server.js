@@ -78,7 +78,8 @@ app.get('/api/generated-products', async (req, res) => {
     sent_products_index += products_to_send.length;
     let response = {products: products_to_send}
     response.message = "extracting all the jazz";
-    response.progress = `${sent_products_index / total_products}`;
+    const progress = (sent_products_index / total_products) * 100;
+    response.progress = `${progress}`;
     //const load_bar = await ejs.renderFile('views/load-bar.ejs', response);
     const load_bar = await ejs.renderFile('views/test-bar.ejs', response);
     res.send(load_bar);
