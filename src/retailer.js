@@ -2,6 +2,8 @@ import axios from "axios";
 import Template from "./template.js";
 import puppeteer from "puppeteer";
 import database from "./database.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 
 class Retailer {
@@ -38,7 +40,16 @@ class Retailer {
 
     static async extract_products(raw_product_list, add_product) {
         console.log('extracting');
-        const browser = await puppeteer.launch({headless:'new'});
+        const browser = await puppeteer.launch({
+            args: [
+                "--no-sandbox",
+                "--disable-setuid-sandbox", 
+            ],
+            executablePath: 
+                process.env.NODE_ENV ==='production'
+                    ? process.env.NODE_ENV
+                    : puppeteer.executablePath() 
+        });
         const page = await browser.newPage();
         console.log('booting up');
         let finished_products = [];
