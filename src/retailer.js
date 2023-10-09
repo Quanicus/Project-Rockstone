@@ -3,6 +3,7 @@ import Template from "./template.js";
 import puppeteer from "puppeteer";
 import database from "./database.js";
 
+
 class Retailer {
 
     //abstract
@@ -35,7 +36,7 @@ class Retailer {
         return html;
     }
 
-    static async extract_products(raw_product_list) {
+    static async extract_products(raw_product_list, add_product) {
         console.log('extracting');
         const browser = await puppeteer.launch({headless:'new'});
         const page = await browser.newPage();
@@ -75,22 +76,11 @@ class Retailer {
             
             //SEND RESULTS TO SERVER
             this.upload_finished_product(finished_product);*/
-            this.upload_finished_product(product);
+            add_product(product);
         }
         page.close();
         browser.close();
         return finished_products;
-    }
-
-
-    static async upload_finished_product(product) {
-        const serverUrl = `/api/add-product`;
-        const config = {
-            method: 'post',
-            url: serverUrl,
-            data: product
-        }
-        this.make_axios_request(config);
     }
 
     static async extract_amzn_asins(page, upc) {

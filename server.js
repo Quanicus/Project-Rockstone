@@ -52,13 +52,10 @@ app.get('/api/activate/:retailer/:fn', async (req, res) => {
     //REMOVE BLACKLISTED FROM RAW PRODUCTS LIST
     //raw_products = await database.filter_through_blacklist(raw_products);
     total_products = raw_products.length;
-    retailer.extract_products(raw_products);
+    retailer.extract_products(raw_products, add_product);
 });
 
-app.post('/api/add-product', async (req, res) => {
-    //filter out products
-    const product = req.body;
-    
+const add_product = (product) => {
     console.log('from add-product');
     if(product.asins && product.asins === 'no matching items') {
         //add to blacklist
@@ -69,6 +66,12 @@ app.post('/api/add-product', async (req, res) => {
         console.log(product);
         generated_products.push(product);
     }
+}
+app.post('/api/add-producto', async (req, res) => {
+    //filter out products
+    const product = req.body;
+    
+    
     
     res.status(200).json({ message: 'Data received successfully' });
 });
