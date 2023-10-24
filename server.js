@@ -2,10 +2,11 @@ import express from "express";
 import cors from "cors";
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import retailMap from "./src/retailMap.js";
-import Template from "./src/template.js";
 import bodyParser from "body-parser";
 import ejs from "ejs";
-import database from './src/database.js'
+import database from './src/database.js';
+import inject_css from "./scripts/css-injector.js";
+
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -16,11 +17,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 async function run() {
+    console.log('wtfbetch')
+    inject_css();
     await database.connect_to_database()
     const port = process.env.PORT || 3000;
     app.listen(port, () => {
         console.log(`Server is running on port ${port}`);
-    });
+    }); 
 }
 
 let sent_products_index = 0;
@@ -55,11 +58,11 @@ app.get('/api/activate/:retailer/:fn', async (req, res) => {
     retailer.extract_products(raw_products, add_product);
 });
 
-const add_product = (product) => {
+const add_product = async (product) => {
     console.log('from add-product');
     if(product.asins && product.asins === 'no matching items') {
         //add to blacklist
-        //await database.add_to_blacklist(product);
+        await database.add_to_blacklist(product);
         console.log('no matches');
         //console.log(product);
     } else {
@@ -67,7 +70,7 @@ const add_product = (product) => {
         generated_products.push(product);
     }
 }
-app.post('/api/add-producto', async (req, res) => {
+app.post('/api/add-product', async (req, res) => {
     //filter out products
     const product = req.body;
     
@@ -83,8 +86,8 @@ app.get('/api/generated-products', async (req, res) => {
     response.message = "extracting all the jazz";
     const progress = (sent_products_index / total_products) * 100;
     response.progress = `${progress}`;
-    //const load_bar = await ejs.renderFile('views/load-bar.ejs', response);
-    const load_bar = await ejs.renderFile('views/test-bar.ejs', response);
+    const load_bar = await ejs.renderFile('views/load-bar.ejs', response);
+    //const load_bar = await ejs.renderFile('views/test-bar.ejs', response);
     res.send(load_bar);
 });
 

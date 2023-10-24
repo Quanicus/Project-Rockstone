@@ -86,7 +86,7 @@ class Retailer {
             
             //SEND RESULTS TO SERVER
             //this.upload_finished_product(finished_product);
-            add_product(product);
+            add_product(finished_product);
         }
         page.close();
         browser.close();
