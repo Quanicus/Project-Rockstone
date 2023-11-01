@@ -18,7 +18,9 @@ app.use(express.static('public'));
 
 async function run() {
     console.log('wtfbetch')
-    inject_css();
+    const directoryToSearch = './public/styles';
+    const htmlFilePath = './public/base-index.html';
+    inject_css(directoryToSearch, htmlFilePath);
     await database.connect_to_database()
     const port = process.env.PORT || 3000;
     app.listen(port, () => {
@@ -55,6 +57,7 @@ app.get('/api/activate/:retailer/:fn', async (req, res) => {
     //REMOVE BLACKLISTED FROM RAW PRODUCTS LIST
     //raw_products = await database.filter_through_blacklist(raw_products);
     total_products = raw_products.length;
+    console.log(raw_products.slice(0, 10));
     retailer.extract_products(raw_products, add_product);
 });
 
@@ -87,7 +90,6 @@ app.get('/api/generated-products', async (req, res) => {
     const progress = (sent_products_index / total_products) * 100;
     response.progress = `${progress}`;
     const load_bar = await ejs.renderFile('views/load-bar.ejs', response);
-    //const load_bar = await ejs.renderFile('views/test-bar.ejs', response);
     res.send(load_bar);
 });
 

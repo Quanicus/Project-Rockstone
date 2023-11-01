@@ -32,13 +32,13 @@ async function filter_through_blacklist(products) {
             query = { upc: product.upc};
         } else {
             query = {
-            source: {
-                $elemMatch: {
-                    retailer: product.source.retailer,
-                    pid: product.source.pid,
+                source: {
+                    $elemMatch: {
+                        retailer: product.source.retailer,
+                        pid: product.source.pid,
+                    },
                 },
-            },
-        };
+            };
         }
         
   

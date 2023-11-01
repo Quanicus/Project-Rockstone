@@ -24,8 +24,7 @@ class Walmart extends Retailer {
     //overriding abstract method
     static parse_product_response(response) {
         let data = {};
-        const upc = response.data.data.product.upc;
-        data.upc = upc;
+        data.upcs = [response.data.data.product.upc];
         return data;
     }
     //overriding abstract method
@@ -37,6 +36,11 @@ class Walmart extends Retailer {
     static get_menu_options() {
         return [{text_content:"Sales", fn:"scrape_sales"},
                 {text_content:"Flash Deals", fn:"scrape_flash"}];
+    }
+    //overriding asbestos
+    static async scrape_product_page(product) {
+        const product_req_config = this.get_product_req_config(product);
+        return await this.scrape_product_page_w_axios(product_req_config);
     }
     //MENU OPTIONS
     static async scrape_sales() {

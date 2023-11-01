@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-const directoryToSearch = './public/styles';
-const htmlFilePath = './public/base-index.html';
+//const directoryToSearch = './public/styles';
+//const htmlFilePath = './public/base-index.html';
 
 function getAllFiles(directory) {
   const files = [];
@@ -21,7 +21,7 @@ function getAllFiles(directory) {
   return files;
 }
 
-export default function inject_css() {
+export default function inject_css(directoryToSearch, htmlFilePath) {
   console.log('injecting');
   // Read the HTML file.
   const html = fs.readFileSync(htmlFilePath, 'utf8');

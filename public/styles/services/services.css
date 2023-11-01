@@ -2,7 +2,7 @@
     display: block; 
     font-family: "Megatrans";
     text-shadow: 0 0 15px black;
-    background-image: url('../images/gold-galaxy.jpg');
+    background-image: url('../../images/gold-galaxy.jpg');
 }
 #services:checked ~ #services-page {
     opacity: 1;
@@ -10,8 +10,9 @@
 }
 #app-display {
     border: 2px solid red;
-    margin-left: 5%;
-    margin-top: 6%;
+    /* margin-left: 5%;
+    margin-top: 6%; */
+    margin: 4em auto 0 auto;
     width: 90%;
     height: 82%;
     flex-grow: 1;

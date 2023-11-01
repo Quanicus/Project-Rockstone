@@ -10,25 +10,28 @@ class Retailer {
 
     //abstract
     static parse_sales_response(response) {
-        throw new Error("process_raw_products() must be overridden in subclass of Retailer.");
+        throw new Error("process_raw_products(response) must be overridden in subclass of Retailer.");
     }
     //abstract
     static parse_product_response(response) {
-        throw new Error("parse_product_response() must be overridden in subclass of Retailer.");
+        throw new Error("parse_product_response(response) must be overridden in subclass of Retailer.");
     }
     //abstract
     static parse_max_page_response(response) {
-        throw new Error("parse_max_page_response() must be overridden in subclass of Retailer.");
+        throw new Error("parse_max_page_response(response) must be overridden in subclass of Retailer.");
     }
     //abstract
     static get_product_req_config(product) {
-        throw new Error("get_product_req_config() must be overridden in subclass of Retailer.")
+        throw new Error("get_product_req_config(product) must be overridden in subclass of Retailer.")
     }
     //abstract
     static get_menu_options() {
         throw new Error("get_menu_options() must be overridden in subclass of Retailer.");
     }
-
+    //abstract
+    static async scrape_product_page(product) {
+        throw new Error("scrape_product_page(product) must be overridden in subclass of Retailer.");
+    }
     static get_menu() {
         let html = "";
         const options = this.get_menu_options();
@@ -40,7 +43,9 @@ class Retailer {
 
     static async extract_products(raw_product_list, add_product) {
         console.log('extracting');
+        
         const browser = await puppeteer.launch({
+            headless: 'new',
             args: [
                 "--no-sandbox",
                 "--disable-setuid-sandbox", 
@@ -50,51 +55,62 @@ class Retailer {
                     ? process.env.NODE_ENV
                     : puppeteer.executablePath() 
         });
+
         const page = await browser.newPage();
+
         console.log('booting up');
-        let finished_products = [];
+        let extracted_products = [];
 
-        for (const [index, product] of raw_product_list.entries()) {
+        for (const product of raw_product_list) {
+            
+            //console.log("extracting " + index + "/" + raw_product_list.length);
 
-            console.log("extracting " + index + "/" + raw_product_list.length);
+            const product_data = await this.scrape_product_page(product, page);
 
-            const product_req_config = this.get_product_req_config(product);
-            const product_data = await this.scrape_product_page(product_req_config);
             if (!product_data) {
                 console.log('access denied');
                 continue;
             };
-            const finished_product = Object.assign({}, product, product_data);
-
+            const extracted_product = Object.assign({}, product, product_data);
+            console.log(extracted_product);
             //skip if no upc found
-            if (!finished_product.upc) { 
+            if (!extracted_product.upcs || extracted_product.upcs.length === 0) { 
                 //ADD TO BLACKLIST
-                database.add_to_blacklist(product);
+                console.log('no UPCs found')
+                //database.add_to_blacklist(product);
                 continue; 
             }
-
+            
             //FILTER THROUGH BLACKLIST
-            const results = await database.filter_through_blacklist([finished_product]);
+            const results = await database.filter_through_blacklist([extracted_product]);
             if (results.length === 0) {
                 continue;
             }
 
             //GET AMAZON ASINS AND PRICE
-            const asins = await this.extract_amzn_asins(page, finished_product.upc);
-            finished_product.asins = asins;
-            finished_products.push(finished_product);
+            const asins = await this.extract_amzn_asins(page, extracted_product.upcs);
+            if (asins.length === 0) {
+                console.log('no matching asins');
+                continue;
+            }
+            extracted_product.asins = asins;
+            extracted_products.push(extracted_product);
             
             //SEND RESULTS TO SERVER
             //this.upload_finished_product(finished_product);
-            add_product(finished_product);
+            add_product(extracted_product); 
         }
         page.close();
         browser.close();
-        return finished_products;
+        return extracted_products;
     }
 
-    static async extract_amzn_asins(page, upc) {
-        const amzn_url = "https://www.amazon.com/s?k=" + upc;
+    static async extract_amzn_asins(page, upcs) {
+        const amzn_urls = [];
+        for (const upc of upcs) {
+            amzn_urls.push("https://www.amazon.com/s?k=" + upc)
+        }
+        const amzn_url = amzn_urls[0];
         await page.goto(amzn_url);
         const data = await page.evaluate(() => {
 
@@ -146,16 +162,20 @@ class Retailer {
     }
     
     static async scrape_sales_page(req_config) {
-
         const response = await this.make_axios_request(req_config);
         return response ? this.parse_sales_response(response) : undefined;
     }
 
-    static async scrape_product_page(req_config) {
+    static async scrape_product_page_w_axios(req_config) {
         const response = await this.make_axios_request(req_config);
         return response ? this.parse_product_response(response) : undefined;
     }
 
+    /* static async scrape_product_page_w_puppeteer(product, page) {
+        const url = product.source.url;
+        await page.goto(url);
+
+    } */
     static async get_max_page(req_config) {
         const response = await this.make_axios_request(req_config);
         const max_page = response ? this.parse_max_page_response(response) : undefined;

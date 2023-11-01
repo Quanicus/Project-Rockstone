@@ -27,24 +27,58 @@ class Kohls extends Retailer {
         }
     }
 
+    static get_product_req_config(product) {
+        return {
+            url: product.url
+        }
+    }
+
     static parse_sales_response(response) {
         const raw_products = response.data.products;
         const products = raw_products.map(product => {
-            let data = {};
-            data.name = product.productTitle;
-            data.price = product.yourPriceInfo?.yourPrice;
-            data.url = this.domain + product.seoURL;
-            data.pid = product.webID;
-            return data;
+            let source = {};
+            source.retailer = 'Kohls';
+            source.name = product.productTitle;
+            source.price = product.yourPriceInfo?.yourPrice;
+            source.url = this.domain + product.seoURL;
+            source.pid = product.webID;
+            return {source};
         });
         return products;
     }
 
-    static parse_max_page_response(response) {
-        //return response.data.totalPages;
-        return 60;
+    static parse_product_response(response) {
+
     }
 
+    static parse_max_page_response(response) {
+        //return response.data.totalPages;
+        return 20;
+    }
+    static async scrape_product_page(product, page) {
+
+        await page.goto(product.source.url);
+        const product_JSON = await page.evaluate(() => {
+            const script_elements = document.querySelectorAll('script[type="text/javascript"]');
+            for (const element of script_elements) {
+                if (element.textContent.startsWith('/*scriptCode*/')) {
+                    const match = element.textContent.match(/var productV2JsonData = (\{[\s\S]*?\});/);
+                    return match ? JSON.parse(match[1]) : undefined;
+                }
+            }
+            return undefined
+        });
+
+        if (!product_JSON) { return undefined; }
+        let data = {};
+        let upcs = [];
+        for (const variation of product_JSON.SKUS) {
+            upcs.push(variation.UPC.ID);
+        }
+        data.upcs = upcs;
+        return data;
+
+    }
     static async scrape_sales() {
         return await this.scrape_products_from_sales_pages(this.get_sales_page_req_config);
     }

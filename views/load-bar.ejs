@@ -4,22 +4,21 @@
 </div>
 
 <% for (const product of products) { %>
-    <div class="app-result">
+    <div class="app-result" style="border: 1px solid orange; width: min(100%, 700px); background-color: hsl(0 0% 0% /0.75);">
         <div><%= product.source.name %></div>
         <div>UPC: <%= product.upc %></div>
-        <div>
-            <span>
+        <div class="flex" style="justify-content: space-evenly;">
+            <span class="retail-product-card">
                 <a href="<%= product.source.url %>" target="_blank">
                     <div>Current <%= product.source.retailer %> price: $<%= product.source.price %></div>
                 </a>
             </span>
-            <span>
+            <span class="amzn-product-card">
                 <a href="https://www.amazon.com/dp/<%= product.asins[0].asin %>" target="_blank">
                     <div>Amazon price: $<%= product.asins[0].price %></div>
                     <div>Amazon ASIN: <%= product.asins[0].asin %></div>
                 </a>
             </span>
-            
         </div> 
     </div>
 <% } %>
