@@ -8,6 +8,10 @@ COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY . .
-# Change permissions for the HTML file
-RUN chmod 666 ./public/index.html
+# Add a non-root user and group
+RUN groupadd -r dev && sysadmin -m -r -g dev sysadmin
+# Change ownership of the application directory
+RUN chown -R sysadmin:dev /usr/src/app
+USER sysadmin
+
 CMD ["node", "server.js"]
