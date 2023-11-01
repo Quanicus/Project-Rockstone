@@ -8,12 +8,6 @@ COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY . .
-# Create a non-root user
-RUN groupadd -r nodejs && useradd -m -r -g nodejs nodejs
-
-# Change ownership of the working directory to the non-root user
-RUN chown -R nodejs:nodejs /usr/src/app
-
-# Switch to the non-root user
-USER nodejs
+# Change permissions for the HTML file
+RUN chmod 666 ./public/index.html
 CMD ["node", "server.js"]
