@@ -57,6 +57,19 @@ class Retailer {
         });
 
         const page = await browser.newPage();
+        // Listen for outgoing network requests
+        page.on('request', (request) => {
+            console.log(`Request URL: ${request.url()}`);
+            console.log(`Request Method: ${request.method()}`);
+            console.log(`Request Headers: ${JSON.stringify(request.headers())}`);
+        });
+        
+        // Listen for incoming network responses
+        page.on('response', (response) => {
+            console.log(`Response URL: ${response.url()}`);
+            console.log(`Response Status: ${response.status()}`);
+            console.log(`Response Headers: ${JSON.stringify(response.headers())}`);
+        });
 
         console.log('booting up');
         let extracted_products = [];
