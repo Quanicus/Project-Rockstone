@@ -44,4 +44,6 @@ export default function inject_css(directoryToSearch, htmlFilePath) {
   console.log('injected');
 }
 
-
+const directoryToSearch = './public/styles';
+    const htmlFilePath = './public/base-index.html';
+    inject_css(directoryToSearch, htmlFilePath);

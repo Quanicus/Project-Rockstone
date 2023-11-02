@@ -17,10 +17,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 async function run() {
-    console.log('wtfbetch')
-    const directoryToSearch = './public/styles';
+    /* const directoryToSearch = './public/styles';
     const htmlFilePath = './public/base-index.html';
-    inject_css(directoryToSearch, htmlFilePath);
+    inject_css(directoryToSearch, htmlFilePath); */
     await database.connect_to_database()
     const port = process.env.PORT || 3000;
     app.listen(port, () => {
