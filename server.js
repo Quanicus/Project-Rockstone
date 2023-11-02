@@ -5,7 +5,7 @@ import retailMap from "./src/retailMap.js";
 import bodyParser from "body-parser";
 import ejs from "ejs";
 import database from './src/database.js';
-import inject_css from "./scripts/css-injector.js";
+//import inject_css from "./scripts/css-injector.js";
 
 
 const app = express();
