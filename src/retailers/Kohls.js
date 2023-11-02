@@ -57,6 +57,7 @@ class Kohls extends Retailer {
     }
     static async scrape_product_page(product, page) {
 
+        console.log("kohls goto: " + product.source.url);
         await page.goto(product.source.url, {timeout: 100000});
         const product_JSON = await page.evaluate(() => {
             const script_elements = document.querySelectorAll('script[type="text/javascript"]');
