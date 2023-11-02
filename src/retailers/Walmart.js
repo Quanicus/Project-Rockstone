@@ -40,7 +40,9 @@ class Walmart extends Retailer {
     //overriding asbestos
     static async scrape_product_page(product) {
         const product_req_config = this.get_product_req_config(product);
-        return await this.scrape_product_page_w_axios(product_req_config);
+        //return await this.scrape_product_page_w_axios(product_req_config);
+        const response = await this.make_axios_request(product_req_config);
+        return response ? this.parse_product_response(response) : undefined;
     }
     //MENU OPTIONS
     static async scrape_sales() {
