@@ -20,6 +20,8 @@
   },
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "lima": "colima start --cpu 2 --memory 4 --disk 50 --arch x86_64",
+    "dock": "docker run -p 3000:3000 --name app-container rockstone:v1"
   }
 }
